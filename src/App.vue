@@ -6,3 +6,13 @@
   </div>
   <router-view />
 </template>
+
+<style>
+body {
+  background: #f5f5f5;
+}
+
+:focus {
+  outline: 0;
+}
+</style>

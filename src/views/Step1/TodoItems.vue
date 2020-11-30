@@ -1,8 +1,6 @@
 <template>
   <ul class="todo-list">
-    <todo-item contents="아이템 01" />
-    <todo-item :editing="true" contents="아이템 02" />
-    <todo-item :completed="true" contents="아이템 03" />
+    <todo-item v-for="(item, key) in items" :key="key" v-bind="item" />
   </ul>
 </template>
 
@@ -10,7 +8,10 @@
 import TodoItem from "@/views/Step1/TodoItem";
 export default {
   name: "TodoItems",
-  components: { TodoItem }
+  components: { TodoItem },
+  props: {
+    items: { type: Array, default: () => [] }
+  }
 };
 </script>
 

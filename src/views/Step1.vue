@@ -4,7 +4,7 @@
       <h1>TODOS STEP1</h1>
       <todo-appender />
       <main>
-        <todo-items />
+        <todo-items :items="items" />
         <todo-footer />
       </main>
     </div>
@@ -15,11 +15,31 @@
 import TodoAppender from "@/views/Step1/TodoAppender";
 import TodoFooter from "@/views/Step1/TodoFooter";
 import TodoItems from "@/views/Step1/TodoItems";
+import useTodo from "@/composition/step1/useTodo";
+import { computed } from "vue";
 
 export default {
   name: "Step1",
   components: { TodoItems, TodoFooter, TodoAppender },
-  setup() {}
+  setup() {
+    const {
+      todoItems,
+      addItem,
+      updateItem,
+      editingItem,
+      deleteItem
+    } = useTodo();
+
+    const items = computed(() => todoItems.ids.map(v => todoItems.entities[v]));
+
+    return {
+      items,
+      addItem,
+      updateItem,
+      editingItem,
+      deleteItem
+    };
+  }
 };
 </script>
 

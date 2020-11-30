@@ -1,10 +1,26 @@
-import { reactive, toRef } from "vue";
+import { reactive } from "vue";
 
 export default function useTodo() {
   const state = reactive({
     todoItems: {
-      entities: {},
-      ids: []
+      entities: {
+        1: {
+          contents: "아이템 01",
+          editing: false,
+          completed: false
+        },
+        2: {
+          contents: "아이템 02",
+          editing: true,
+          completed: false
+        },
+        3: {
+          contents: "아이템 03",
+          editing: false,
+          completed: true
+        }
+      },
+      ids: [1, 2, 3]
     }
   });
 
@@ -56,7 +72,7 @@ export default function useTodo() {
   };
 
   return {
-    todoItems: toRef(state, "todoItems"),
+    todoItems: state.todoItems,
     addItem,
     editingItem,
     updateItem,

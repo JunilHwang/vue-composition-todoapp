@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { Step1, Step2, Step3 } from "../views";
+import Step1 from "@/views/Step1";
+import Step2 from "@/views/Step2";
+import Step3 from "@/views/Step3";
 
 const routes = [
   {
@@ -16,7 +18,7 @@ const routes = [
     path: "/step3",
     name: "Step3",
     component: Step3
-  },
+  }
 ];
 
 const router = createRouter({

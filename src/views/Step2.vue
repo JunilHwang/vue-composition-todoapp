@@ -2,6 +2,12 @@
   <div>step2</div>
 </template>
 
+<script>
+export default {
+  name: "Step2"
+};
+</script>
+
 <style lang="scss">
 .step2 {
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;

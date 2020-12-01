@@ -5,18 +5,20 @@ import useUser from "@/composition/step2/useUser";
 export default function useTodo() {
   const { selectedUserId } = useUser();
   const state = reactive({
+    nowUserId: null,
     todoItems: [],
     listLoading: false,
     addLoading: false
   });
 
   const fetchItems = async userId => {
-    if (userId !== state.userId) {
+    if (userId !== state.nowUserId) {
       state.listLoading = true;
     }
     try {
       const items = await todoServiceOfStep2.fetchItemsByUser(userId);
       state.todoItems = items.map(({ _id, ...item }) => ({ id: _id, ...item }));
+      state.nowUserId = userId;
     } catch (e) {
       console.error(e);
     } finally {

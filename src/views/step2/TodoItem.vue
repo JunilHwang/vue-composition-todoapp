@@ -34,8 +34,8 @@
       class="edit"
       :ref="el => (editor = el)"
       :value="contents"
-      @keydown.enter="updateItem"
-      @keydown.esc="editContents(false)"
+      @keyup.enter="updateItem"
+      @keyup.esc="editContents(false)"
     />
   </li>
 </template>

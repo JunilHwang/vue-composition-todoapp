@@ -37,7 +37,7 @@ export default function useTodo() {
     state.todoItems = {
       entities: {
         ...entities,
-        [id]: { contents, completed: false, editing: false }
+        [id]: { id, contents, completed: false, editing: false }
       },
       ids: [...ids, id]
     };
@@ -68,7 +68,7 @@ export default function useTodo() {
   const deleteItem = id => {
     const { entities, ids } = state.todoItems;
     state.todoItems = {
-      ids: ids.filter(id => id !== id),
+      ids: ids.filter(v => v !== id),
       entities: Object.keys(entities).reduce((obj, v) => {
         if (v !== id) obj[v] = entities[v];
         return obj;

@@ -10,6 +10,7 @@
 <script>
 export default {
   name: "TodoAppender",
+
   setup(props, context) {
     const addItem = event => {
       context.emit("add-item", event.target.value);

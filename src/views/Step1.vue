@@ -9,6 +9,7 @@
           @update-item="updateItem"
           @editing-item="editingItem"
           @delete-item="deleteItem"
+          @toggle-item="toggleItem"
         />
         <todo-footer />
       </main>
@@ -32,7 +33,8 @@ export default {
       addItem,
       updateItem,
       editingItem,
-      deleteItem
+      deleteItem,
+      toggleItem
     } = useTodo();
 
     const items = computed(() =>
@@ -44,7 +46,8 @@ export default {
       addItem,
       updateItem,
       editingItem,
-      deleteItem
+      deleteItem,
+      toggleItem
     };
   }
 };

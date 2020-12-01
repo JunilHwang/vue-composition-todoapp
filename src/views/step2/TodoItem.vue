@@ -1,39 +1,51 @@
 <template>
   <li :class="className">
     <div class="view">
-      <input class="toggle" type="checkbox" :checked="isCompleted" />
-      <label class="label">
-        <select class="chip select" v-if="editingPriority">
+      <input
+        class="toggle"
+        type="checkbox"
+        :checked="isCompleted"
+        @change="$emit('toggle-item', id)"
+      />
+      <label class="label" @dblclick="editContents(true)">
+        <select
+          class="chip select"
+          v-if="editingPriority"
+          @change="updatePriority"
+        >
           <option
-            value="0"
-            :selected="PriorityTypes.NONE === priority"
-            v-html="`0순위`"
-          />
-          <option
-            value="1"
-            :selected="PriorityTypes.FIRST === priority"
-            v-html="`1순위`"
-          />
-          <option
-            value="2"
-            :selected="PriorityTypes.SECOND === priority"
-            v-html="`2순위`"
+            v-for="(value, key) in Object.values(PriorityTypes)"
+            :key="`priority_${id}_${key}`"
+            :value="value"
+            :selected="value === priority"
+            v-html="`${key}순위`"
           />
         </select>
-        <todo-item-chip :priority="priority" />
+        <todo-item-chip
+          v-else
+          :priority="priority"
+          @edit-priority="editPriority"
+        />
         {{ contents }}
       </label>
-      <button class="destroy"></button>
+      <button class="destroy" @click="$emit('remove-item', id)" />
     </div>
-    <input class="edit" value="완료된 타이틀" />
+    <input
+      class="edit"
+      :ref="el => (editor = el)"
+      :value="contents"
+      @keydown.enter="updateItem"
+      @keydown.esc="editContents(false)"
+    />
   </li>
 </template>
 
 <script>
-import { computed, reactive, toRefs } from "@vue/reactivity";
+import { computed, reactive, ref, toRefs } from "@vue/reactivity";
 
 import { PriorityTypes } from "@/constants";
 import TodoItemChip from "@/views/step2/TodoItemChip";
+import { nextTick } from "@vue/runtime-core";
 
 export default {
   name: "TodoItem",
@@ -45,7 +57,8 @@ export default {
     priority: { type: String, required: true }
   },
 
-  setup(props) {
+  setup(props, { emit }) {
+    const editor = ref(null);
     const state = reactive({
       editingContents: false,
       editingPriority: false
@@ -57,10 +70,34 @@ export default {
       return null;
     });
 
+    const editContents = type => {
+      state.editingContents = type;
+      nextTick(() => editor.value.focus());
+    };
+
+    const editPriority = () => {
+      state.editingPriority = true;
+    };
+
+    const updatePriority = ({ target }) => {
+      emit("update-priority", target.value);
+      state.editingPriority = false;
+    };
+
+    const updateItem = ({ target }) => {
+      emit("update-item", props.id, target.value);
+      editContents(false);
+    };
+
     return {
       ...toRefs(state),
       className,
-      PriorityTypes
+      PriorityTypes,
+      editor,
+      editContents,
+      editPriority,
+      updatePriority,
+      updateItem
     };
   }
 };

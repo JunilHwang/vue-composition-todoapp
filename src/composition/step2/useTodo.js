@@ -1,4 +1,5 @@
 import { reactive, toRefs } from "@vue/reactivity";
+
 import todoServiceOfStep2 from "@/services/todoServiceOfStep2";
 
 export default function useTodo() {
@@ -12,12 +13,13 @@ export default function useTodo() {
   const fetchItems = async (userId = state.nowUserId) => {
     if (userId !== state.nowUserId) {
       state.listLoading = true;
+      state.nowUserId = userId;
     }
     try {
       const items = await todoServiceOfStep2.fetchItemsByUser(userId);
       state.todoItems = items.map(({ _id, ...item }) => ({ id: _id, ...item }));
-      state.nowUserId = userId;
     } catch (e) {
+      state.todoItems = [];
       console.error(e);
     } finally {
       state.listLoading = false;
@@ -51,6 +53,7 @@ export default function useTodo() {
   };
 
   const toggleItem = async itemId => {
+    console.log(itemId);
     await todoServiceOfStep2.toggleItemByUserIdAndItemId(
       state.nowUserId,
       itemId

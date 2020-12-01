@@ -6,6 +6,7 @@
         :key="item.id"
         v-bind="item"
         @update-item="(...args) => $emit('update-item', ...args)"
+        @toggle-item="(...args) => $emit('toggle-item', ...args)"
         @remove-item="(...args) => $emit('remove-item', ...args)"
         @update-priority="(...args) => $emit('update-priority', ...args)"
       />

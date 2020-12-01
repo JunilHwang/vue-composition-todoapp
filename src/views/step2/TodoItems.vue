@@ -1,7 +1,11 @@
 <template>
   <section class="main">
     <ul class="todo-list">
-      <todoItem v-for="item in items" :key="item.id" />
+      <todoItem
+        v-for="item in items"
+        :key="item.id"
+        v-bind="item"
+      />
       <li>
         <div class="view">
           <input class="toggle" type="checkbox" />

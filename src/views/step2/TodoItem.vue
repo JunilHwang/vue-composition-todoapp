@@ -17,7 +17,26 @@
 </template>
 
 <script>
+import { reactive, toRefs } from "@vue/reactivity";
+
 export default {
-  name: "TodoItem"
+  name: "TodoItem",
+
+  props: {
+    id: { type: String, required: true },
+    contents: { type: String, required: true },
+    isCompleted: { type: Boolean, required: true },
+    priority: { type: String, required: true }
+  },
+
+  setup() {
+    const state = reactive({
+      editing: false
+    });
+
+    return {
+      ...toRefs(state)
+    };
+  }
 };
 </script>

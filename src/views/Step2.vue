@@ -3,7 +3,11 @@
     <h1 id="user-title" data-username="eastjun">
       <span><strong>eastjun</strong>'s Todo List</span>
     </h1>
-    <user-list :users="users" />
+    <user-list
+      :users="users"
+      @select-user="fetchItems"
+      @remove-user="removeUser"
+    />
     <section class="todoapp">
       <todo-appender />
       <todo-items />
@@ -25,7 +29,7 @@ export default {
   components: { TodoItems, TodoAppender, UserList, TodoFooter },
 
   setup() {
-    const { users, fetchUser, removeUser } = useUser();
+    const { users, fetchUsers, removeUser } = useUser();
     const {
       todoItems,
       fetchItems,
@@ -37,12 +41,11 @@ export default {
       updatePriorityItem
     } = useTodo();
 
-    fetchUser();
+    fetchUsers();
 
     return {
       users,
       todoItems,
-      fetchUser,
       removeUser,
       fetchItems,
       addItem,

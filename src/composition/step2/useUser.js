@@ -6,19 +6,19 @@ export default function useUser() {
     users: []
   });
 
-  const fetchUser = async () => {
+  const fetchUsers = async () => {
     const users = await todoServiceOfStep2.fetchUsers();
     state.users = users.map(({ _id, name }) => ({ id: _id, name }));
   };
 
   const removeUser = async userId => {
     await todoServiceOfStep2.removeUser(userId);
-    await fetchUser();
+    await fetchUsers();
   };
 
   return {
     users: toRef(state, "users"),
-    fetchUser,
+    fetchUsers,
     removeUser
   };
 }

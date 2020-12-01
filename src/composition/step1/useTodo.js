@@ -1,31 +1,17 @@
 import { reactive, toRef } from "vue";
-
+import todoServiceOfStep1 from "@/services/todoServiceOfStep1";
+import { watchEffect } from "@vue/runtime-core";
 
 export default function useTodo() {
   const state = reactive({
-    todoItems: {
-      entities: {
-        1: {
-          id: 1,
-          contents: "아이템 01",
-          editing: false,
-          completed: false
-        },
-        2: {
-          id: 2,
-          contents: "아이템 02",
-          editing: true,
-          completed: false
-        },
-        3: {
-          id: 3,
-          contents: "아이템 03",
-          editing: false,
-          completed: true
-        }
+    todoItems: todoServiceOfStep1.fetchTodoItems().reduce(
+      (obj, item) => {
+        obj.entities[item.id] = item;
+        obj.ids.push(item.id);
+        return obj;
       },
-      ids: [1, 2, 3]
-    }
+      { entities: {}, ids: [] }
+    )
   });
 
   const getLastTodoId = () => {
@@ -90,6 +76,11 @@ export default function useTodo() {
       ids: [...ids]
     };
   };
+
+  watchEffect(() => {
+    const { entities, ids } = state.todoItems;
+    todoServiceOfStep1.putTodoItems(ids.map(id => entities[id]));
+  });
 
   return {
     todoItems: toRef(state, "todoItems"),

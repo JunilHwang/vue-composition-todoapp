@@ -11,9 +11,9 @@ export const fetchFilterType = () => {
   return repository.get(KEY)?.filterType || FilterTypes.ALL;
 };
 
-export const putTodoItems = items => {
+export const putTodoItems = todoItems => {
   const todoData = repository.get(KEY) || {};
-  repository.set(KEY, { ...todoData, items });
+  repository.set(KEY, { ...todoData, todoItems });
 };
 
 export const putFilterType = filterType => {

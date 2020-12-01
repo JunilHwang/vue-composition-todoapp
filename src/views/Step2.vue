@@ -27,6 +27,7 @@
         <todo-footer
           :count="todoFilteredItems.length"
           :filter-type="filterType"
+          @change-filter="changeFilterType"
         />
       </section>
     </template>

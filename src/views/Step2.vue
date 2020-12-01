@@ -1,33 +1,35 @@
 <template>
   <div class="step2">
-    <h1 id="user-title" data-username="eastjun">
-      <span><strong>eastjun</strong>'s Todo List</span>
-    </h1>
     <user-list
       :users="orderedUsers"
-      :selected-user="userHooks.selectedUserId"
+      :selected-user="selectedUserId"
       @add-user="userHooks.addUser"
       @select-user="userHooks.selectUser"
       @remove-user="userHooks.removeUser"
       @fetch-items="todoHooks.fetchItems"
       @reset-items="todoHooks.resetItems"
     />
-    <section class="todoapp">
-      <todo-appender @add-item="todoHooks.addItem" />
-      <todo-items
-        :todo-items="todoFilteredItems"
-        :list-loading="todoHooks.listLoading"
-        :add-loading="todoHooks.addLoading"
-        @update-item="todoHooks.updateItem"
-        @delete-item="todoHooks.deleteItem"
-        @toggle-item="todoHooks.toggleItem"
-        @update-priority="todoHooks.updatePriority"
-      />
-      <todo-footer
-        :count="todoFilteredItems.length"
-        :filter-type="filterType"
-      />
-    </section>
+    <template v-if="selectedUser">
+      <h1 id="user-title">
+        <span><strong v-html="selectedUser.name" />'s Todo List</span>
+      </h1>
+      <section class="todoapp">
+        <todo-appender @add-item="todoHooks.addItem" />
+        <todo-items
+          :todo-items="todoFilteredItems"
+          :list-loading="listLoading"
+          :add-loading="addLoading"
+          @update-item="todoHooks.updateItem"
+          @delete-item="todoHooks.deleteItem"
+          @toggle-item="todoHooks.toggleItem"
+          @update-priority="todoHooks.updatePriority"
+        />
+        <todo-footer
+          :count="todoFilteredItems.length"
+          :filter-type="filterType"
+        />
+      </section>
+    </template>
   </div>
 </template>
 
@@ -48,8 +50,8 @@ export default {
   components: { TodoItems, TodoAppender, UserList, TodoFooter },
 
   setup() {
-    const { users, ...userHooks } = useUser();
-    const { todoItems, ...todoHooks } = useTodo();
+    const { users, selectedUserId, ...userHooks } = useUser();
+    const { todoItems, listLoading, addLoading, ...todoHooks } = useTodo();
     const { filterType, changeFilterType } = useFilter();
 
     userHooks.fetchUsers();
@@ -67,11 +69,19 @@ export default {
       )
     );
 
+    const selectedUser = computed(() =>
+      orderedUsers.value.find(user => user.id === selectedUserId.value)
+    );
+
     return {
       userHooks,
       todoHooks,
+      selectedUserId,
+      selectedUser,
       orderedUsers,
       todoFilteredItems,
+      listLoading,
+      addLoading,
       filterType,
       changeFilterType
     };

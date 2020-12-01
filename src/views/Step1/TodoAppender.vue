@@ -1,11 +1,23 @@
 <template>
-  <input class="new-todo" placeholder="할일을 추가해주세요" autofocus />
+  <input
+    class="new-todo"
+    placeholder="할일을 추가해주세요"
+    @keydown.enter="addItem"
+    autofocus
+  />
 </template>
 
 <script>
 export default {
   name: "TodoAppender",
-  setup() {}
+  setup(props, context) {
+    const addItem = event => {
+      context.emit("add-item", event.target.value);
+      event.target.value = "";
+    };
+
+    return { addItem };
+  }
 };
 </script>
 

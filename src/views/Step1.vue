@@ -2,9 +2,14 @@
   <div class="step1">
     <div class="todoapp">
       <h1>TODOS STEP1</h1>
-      <todo-appender />
+      <todo-appender @add-item="addItem" />
       <main>
-        <todo-items :items="items" />
+        <todo-items
+          :items="items"
+          @update-item="updateItem"
+          @editing-item="editingItem"
+          @delete-item="deleteItem"
+        />
         <todo-footer />
       </main>
     </div>

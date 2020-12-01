@@ -5,16 +5,19 @@ export default function useTodo() {
     todoItems: {
       entities: {
         1: {
+          id: 1,
           contents: "아이템 01",
           editing: false,
           completed: false
         },
         2: {
+          id: 2,
           contents: "아이템 02",
           editing: true,
           completed: false
         },
         3: {
+          id: 3,
           contents: "아이템 03",
           editing: false,
           completed: true

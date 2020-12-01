@@ -1,7 +1,12 @@
 <template>
   <li :class="className">
     <div class="view">
-      <input class="toggle" type="checkbox" :checked="completed" />
+      <input
+        class="toggle"
+        type="checkbox"
+        :checked="completed"
+        @change="$emit('toggle', id)"
+      />
       <label class="label" v-html="contents" />
       <button class="destroy"></button>
     </div>
@@ -16,6 +21,7 @@ export default {
   name: "TodoItem",
 
   props: {
+    id: { type: Number, required: true },
     completed: { type: Boolean, default: false },
     contents: { type: String, default: "" },
     editing: { type: Boolean, default: false }

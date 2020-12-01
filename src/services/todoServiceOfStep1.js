@@ -1,5 +1,5 @@
 import repository from "../repository";
-import { FilterTypes } from "@/composition/step1/useFilter";
+import { FilterTypes } from "@/constants";
 
 const KEY = "STEP1_TODO_REPOSITORY";
 

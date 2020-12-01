@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { FilterTypes } from "@/composition/step1/useFilter";
+import { FilterTypes } from "@/constants";
 
 export default {
   name: "TodoFooter",

@@ -1,12 +1,6 @@
 import { reactive, toRef } from "@vue/reactivity";
 import todoServiceOfStep1 from "@/services/todoServiceOfStep1";
 
-export const FilterTypes = {
-  ALL: "all",
-  ACTIVE: "active",
-  COMPLETED: "completed"
-};
-
 export default function useFilter() {
   const state = reactive({
     filterType: todoServiceOfStep1.fetchFilterType()

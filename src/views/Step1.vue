@@ -27,7 +27,8 @@ import TodoAppender from "@/views/Step1/TodoAppender";
 import TodoFooter from "@/views/Step1/TodoFooter";
 import TodoItems from "@/views/Step1/TodoItems";
 import useTodo from "@/composition/step1/useTodo";
-import useFilter, { FilterTypes } from "@/composition/step1/useFilter";
+import useFilter from "@/composition/step1/useFilter";
+import { FilterTypes } from "@/constants";
 
 export default {
   name: "Step1",

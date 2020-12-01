@@ -1,7 +1,9 @@
 import { reactive, toRefs } from "@vue/reactivity";
 import todoServiceOfStep2 from "@/services/todoServiceOfStep2";
+import useUser from "@/composition/step2/useUser";
 
 export default function useTodo() {
+  const { selectedUserId } = useUser();
   const state = reactive({
     todoItems: [],
     listLoading: false,
@@ -26,11 +28,11 @@ export default function useTodo() {
     state.todoItems = [];
   };
 
-  const addItem = async (userId, contents) => {
+  const addItem = async contents => {
     state.addLoading = true;
     try {
-      await todoServiceOfStep2.addItemByUser(userId, contents);
-      await fetchItems(userId);
+      await todoServiceOfStep2.addItemByUser(selectedUserId.value, contents);
+      await fetchItems(selectedUserId.value);
     } catch (e) {
       console.error(e);
     } finally {
@@ -38,37 +40,40 @@ export default function useTodo() {
     }
   };
 
-  const updateItem = async (userId, itemId, contents) => {
+  const updateItem = async (itemId, contents) => {
     await todoServiceOfStep2.updateItemByUserIdAndItemId(
-      userId,
+      selectedUserId.value,
       itemId,
       contents
     );
-    await fetchItems(userId);
+    await fetchItems(selectedUserId.value);
   };
 
-  const toggleItem = async (userId, itemId) => {
-    await todoServiceOfStep2.toggleItemByUserIdAndItemId(userId, itemId);
-    await fetchItems(userId);
+  const toggleItem = async itemId => {
+    await todoServiceOfStep2.toggleItemByUserIdAndItemId(
+      selectedUserId.value,
+      itemId
+    );
+    await fetchItems(selectedUserId.value);
   };
 
-  const removeItem = async (userId, itemId) => {
-    await todoServiceOfStep2.removeUserItemById(userId, itemId);
-    await fetchItems(userId);
+  const removeItem = async itemId => {
+    await todoServiceOfStep2.removeUserItemById(selectedUserId.value, itemId);
+    await fetchItems(selectedUserId);
   };
 
-  const removeAllItem = async userId => {
-    await todoServiceOfStep2.removeUserItems(userId);
-    await fetchItems(userId);
+  const removeAllItem = async () => {
+    await todoServiceOfStep2.removeUserItems(selectedUserId.value);
+    await fetchItems(selectedUserId.value);
   };
 
-  const updatePriorityItem = async (userId, itemId, priority) => {
+  const updatePriority = async (itemId, priority) => {
     await todoServiceOfStep2.updateItemPriorityByUserIdAndItemId(
-      userId,
+      selectedUserId.value,
       itemId,
       priority
     );
-    await fetchItems(userId);
+    await fetchItems(selectedUserId.value);
   };
 
   return {
@@ -79,7 +84,7 @@ export default function useTodo() {
     toggleItem,
     removeItem,
     removeAllItem,
-    updatePriorityItem,
+    updatePriority,
     resetItems
   };
 }

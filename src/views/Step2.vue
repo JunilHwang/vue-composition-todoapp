@@ -13,15 +13,20 @@
       @reset-items="todoHooks.resetItems"
     />
     <section class="todoapp">
-      <todo-appender
-
-      />
+      <todo-appender @add-item="todoHooks.addItem" />
       <todo-items
         :todo-items="todoFilteredItems"
         :list-loading="todoHooks.listLoading"
         :add-loading="todoHooks.addLoading"
+        @update-item="todoHooks.updateItem"
+        @delete-item="todoHooks.deleteItem"
+        @toggle-item="todoHooks.toggleItem"
+        @update-priority="todoHooks.updatePriority"
       />
-      <todo-footer />
+      <todo-footer
+        :count="todoFilteredItems.length"
+        :filter-type="filterType"
+      />
     </section>
   </div>
 </template>
@@ -44,7 +49,7 @@ export default {
 
   setup() {
     const { users, ...userHooks } = useUser();
-    const { todoItems, addItem, ...todoHooks } = useTodo();
+    const { todoItems, ...todoHooks } = useTodo();
     const { filterType, changeFilterType } = useFilter();
 
     userHooks.fetchUsers();
@@ -62,16 +67,12 @@ export default {
       )
     );
 
-    const addItemByUser = contents => {
-      addItem(userHooks.selectedUserId.value, contents);
-    };
-
     return {
       userHooks,
       todoHooks,
       orderedUsers,
       todoFilteredItems,
-      addItemByUser,
+      filterType,
       changeFilterType
     };
   }

@@ -8,7 +8,7 @@
         @change="$emit('toggle', id)"
       />
       <label class="label" v-html="contents" @dblclick="handleEditing" />
-      <button class="destroy"></button>
+      <button class="destroy" @click="handleDelete"></button>
     </div>
     <input
       v-if="editing"
@@ -54,7 +54,18 @@ export default {
       context.emit("update", { id: props.id, contents: props.contents });
     };
 
-    return { className, editor, handleEditing, handleUpdate, handleCancel };
+    const handleDelete = () => {
+      context.emit("delete", props.id);
+    };
+
+    return {
+      className,
+      editor,
+      handleEditing,
+      handleUpdate,
+      handleCancel,
+      handleDelete
+    };
   }
 };
 </script>

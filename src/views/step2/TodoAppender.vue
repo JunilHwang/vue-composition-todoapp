@@ -3,7 +3,7 @@
     <input
       class="new-todo"
       placeholder="할 일을 입력해주세요."
-      @keydown.enter="handleAddItem"
+      @keypress.enter="handleAddItem"
       autofocus
     />
   </section>
@@ -17,6 +17,7 @@ export default {
     return {
       handleAddItem({ target }) {
         emit("add-item", target.value);
+        target.value = "";
       }
     };
   }

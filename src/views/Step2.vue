@@ -20,7 +20,7 @@
           :list-loading="listLoading"
           :add-loading="addLoading"
           @update-item="todoHooks.updateItem"
-          @delete-item="todoHooks.deleteItem"
+          @remove-item="todoHooks.removeItem"
           @toggle-item="todoHooks.toggleItem"
           @update-priority="todoHooks.updatePriority"
         />

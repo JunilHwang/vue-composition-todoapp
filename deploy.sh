@@ -10,11 +10,11 @@ cd dist
 # echo 'www.example.com' > CNAME
 
 git clone -b gh-pages https://github.com/JunilHwang/vue-composition-todoapp/
-cp -rf TIL/.git ./.git
-rm -rf TIL
+cp -rf vue-composition-todoapp/.git ./.git
+rm -rf vue-composition-todoapp
 
 git add -A
-git commit -m "deploy $(date +%Y%m%d %H%M)"
+git commit -m "deploy $(date +%Y-%m-%d) $(date +%H:%M)"
 
 git push origin gh-pages
 

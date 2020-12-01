@@ -5,18 +5,21 @@
     </h1>
     <user-list
       :users="orderedUsers"
-      :selected-user="selectedUserId"
-      @add-user="addUser"
-      @select-user="selectUser"
-      @fetch-items="fetchItems"
-      @remove-user="removeUser"
+      :selected-user="userHooks.selectedUserId"
+      @add-user="userHooks.addUser"
+      @select-user="userHooks.selectUser"
+      @remove-user="userHooks.removeUser"
+      @fetch-items="todoHooks.fetchItems"
+      @reset-items="todoHooks.resetItems"
     />
     <section class="todoapp">
-      <todo-appender />
+      <todo-appender
+
+      />
       <todo-items
-        :todoItems="todoFilteredItems"
-        :list-loading="listLoading"
-        :add-loading="addLoading"
+        :todo-items="todoFilteredItems"
+        :list-loading="todoHooks.listLoading"
+        :add-loading="todoHooks.addLoading"
       />
       <todo-footer />
     </section>
@@ -40,29 +43,11 @@ export default {
   components: { TodoItems, TodoAppender, UserList, TodoFooter },
 
   setup() {
-    const {
-      users,
-      fetchUsers,
-      selectUser,
-      selectedUserId,
-      addUser,
-      removeUser
-    } = useUser();
-    const {
-      todoItems,
-      listLoading,
-      addLoading,
-      fetchItems,
-      addItem,
-      updateItem,
-      toggleItem,
-      removeItem,
-      removeAllItem,
-      updatePriorityItem
-    } = useTodo();
+    const { users, ...userHooks } = useUser();
+    const { todoItems, addItem, ...todoHooks } = useTodo();
     const { filterType, changeFilterType } = useFilter();
 
-    fetchUsers();
+    userHooks.fetchUsers();
 
     const orderedUsers = computed(() =>
       [...users.value].sort((a, b) => (a.name < b.name ? 1 : -1))
@@ -78,25 +63,15 @@ export default {
     );
 
     const addItemByUser = contents => {
-      addItem(selectedUserId.value, contents);
+      addItem(userHooks.selectedUserId.value, contents);
     };
 
     return {
+      userHooks,
+      todoHooks,
       orderedUsers,
       todoFilteredItems,
-      listLoading,
-      addLoading,
-      selectedUserId,
-      removeUser,
-      addUser,
-      selectUser,
-      fetchItems,
       addItemByUser,
-      updateItem,
-      toggleItem,
-      removeItem,
-      removeAllItem,
-      updatePriorityItem,
       changeFilterType
     };
   }

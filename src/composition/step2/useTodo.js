@@ -3,7 +3,6 @@ import todoServiceOfStep2 from "@/services/todoServiceOfStep2";
 
 export default function useTodo() {
   const state = reactive({
-    userId: null,
     todoItems: [],
     listLoading: false,
     addLoading: false
@@ -21,6 +20,10 @@ export default function useTodo() {
     } finally {
       state.listLoading = false;
     }
+  };
+
+  const resetItems = () => {
+    state.todoItems = [];
   };
 
   const addItem = async (userId, contents) => {
@@ -76,6 +79,7 @@ export default function useTodo() {
     toggleItem,
     removeItem,
     removeAllItem,
-    updatePriorityItem
+    updatePriorityItem,
+    resetItems
   };
 }

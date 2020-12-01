@@ -35,6 +35,7 @@ export default {
 
     const removeUser = () => {
       emit("remove-user");
+      emit("reset-items");
     };
 
     const addUser = () => {

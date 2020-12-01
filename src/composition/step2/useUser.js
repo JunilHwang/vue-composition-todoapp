@@ -12,13 +12,14 @@ export default function useUser() {
     state.users = users.map(({ _id, name }) => ({ id: _id, name }));
   };
 
-  const selectUser = ({ id }) => {
+  const selectUser = id => {
     state.selectedUserId = id;
   };
 
   const addUser = async name => {
-    await todoServiceOfStep2.addUser(name);
+    const { _id } = await todoServiceOfStep2.addUser(name);
     await fetchUsers();
+    state.selectedUserId = _id;
   };
 
   const removeUser = async () => {

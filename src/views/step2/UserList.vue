@@ -9,7 +9,9 @@
         @click="selectUser(id)"
         v-html="name"
       />
-      <button class="ripple user-create-button">+ 유저 생성</button>
+      <button class="ripple user-create-button" @click="addUser">
+        + 유저 생성
+      </button>
       <button class="ripple user-create-button" @click="removeUser">
         - 선택 삭제
       </button>
@@ -41,9 +43,16 @@ export default {
       emit("remove-user", state.selectedUser);
     };
 
+    const addUser = () => {
+      const name = prompt("추가할 유저 이름을 입력해주세요");
+      if (name.trim().length === 0) return;
+      emit("add-user", name)
+    };
+
     return {
       ...toRefs(state),
       selectUser,
+      addUser,
       removeUser
     };
   }

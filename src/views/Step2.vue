@@ -5,6 +5,7 @@
     </h1>
     <user-list
       :users="orderedUsers"
+      @add-user="addUser"
       @select-user="fetchItems"
       @remove-user="removeUser"
     />
@@ -33,7 +34,7 @@ export default {
   components: { TodoItems, TodoAppender, UserList, TodoFooter },
 
   setup() {
-    const { users, fetchUsers, removeUser } = useUser();
+    const { users, fetchUsers, addUser, removeUser } = useUser();
     const {
       todoItems,
       fetchItems,
@@ -65,6 +66,7 @@ export default {
       orderedUsers,
       todoFilteredItems,
       removeUser,
+      addUser,
       fetchItems,
       addItem,
       updateItem,

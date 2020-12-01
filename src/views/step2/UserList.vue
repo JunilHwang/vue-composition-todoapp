@@ -20,37 +20,30 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "@vue/reactivity";
-
 export default {
   name: "UserList",
   props: {
-    users: { type: Array, default: () => [] }
+    users: { type: Array, default: () => [] },
+    selectedUser: { type: String, default: "" }
   },
 
   setup(props, { emit }) {
-    const state = reactive({
-      selectedUser: null
-    });
-
     const selectUser = id => {
-      state.selectedUser = id;
       emit("select-user", id);
+      emit("fetch-items", id);
     };
 
     const removeUser = () => {
-      if (state.selectedUser === 0) return;
-      emit("remove-user", state.selectedUser);
+      emit("remove-user");
     };
 
     const addUser = () => {
       const name = prompt("추가할 유저 이름을 입력해주세요");
       if (name.trim().length === 0) return;
-      emit("add-user", name)
+      emit("add-user", name);
     };
 
     return {
-      ...toRefs(state),
       selectUser,
       addUser,
       removeUser

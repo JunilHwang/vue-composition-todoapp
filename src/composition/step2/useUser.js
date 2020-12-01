@@ -3,7 +3,8 @@ import todoServiceOfStep2 from "@/services/todoServiceOfStep2";
 
 export default function useUser() {
   const state = reactive({
-    users: []
+    users: [],
+    selectedUserId: null
   });
 
   const fetchUsers = async () => {
@@ -11,19 +12,24 @@ export default function useUser() {
     state.users = users.map(({ _id, name }) => ({ id: _id, name }));
   };
 
+  const selectUser = ({ id }) => {
+    state.selectedUserId = id;
+  };
+
   const addUser = async name => {
     await todoServiceOfStep2.addUser(name);
     await fetchUsers();
   };
 
-  const removeUser = async userId => {
-    await todoServiceOfStep2.removeUser(userId);
+  const removeUser = async () => {
+    await todoServiceOfStep2.removeUser(state.selectedUserId);
     await fetchUsers();
   };
 
   return {
     ...toRefs(state),
     fetchUsers,
+    selectUser,
     addUser,
     removeUser
   };

@@ -5,8 +5,10 @@
     </h1>
     <user-list
       :users="orderedUsers"
+      :selected-user="selectedUserId"
       @add-user="addUser"
-      @select-user="fetchItems"
+      @select-user="selectUser"
+      @fetch-items="fetchItems"
       @remove-user="removeUser"
     />
     <section class="todoapp">
@@ -38,7 +40,14 @@ export default {
   components: { TodoItems, TodoAppender, UserList, TodoFooter },
 
   setup() {
-    const { users, fetchUsers, addUser, removeUser } = useUser();
+    const {
+      users,
+      fetchUsers,
+      selectUser,
+      selectedUserId,
+      addUser,
+      removeUser
+    } = useUser();
     const {
       todoItems,
       listLoading,
@@ -68,15 +77,21 @@ export default {
       )
     );
 
+    const addItemByUser = contents => {
+      addItem(selectedUserId.value, contents);
+    };
+
     return {
       orderedUsers,
       todoFilteredItems,
       listLoading,
       addLoading,
+      selectedUserId,
       removeUser,
       addUser,
+      selectUser,
       fetchItems,
-      addItem,
+      addItemByUser,
       updateItem,
       toggleItem,
       removeItem,

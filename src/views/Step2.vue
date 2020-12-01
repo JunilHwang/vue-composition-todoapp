@@ -17,10 +17,19 @@ import UserList from "@/views/step2/UserList";
 import TodoAppender from "@/views/step2/TodoAppender";
 import TodoItems from "@/views/step2/TodoItems";
 import TodoFooter from "@/views/step2/TodoFooter";
+import useUser from "@/composition/step2/useUser";
 
 export default {
   name: "Step2",
-  components: { TodoItems, TodoAppender, UserList, TodoFooter }
+  components: { TodoItems, TodoAppender, UserList, TodoFooter },
+
+  setup() {
+    const { users, fetchUser } = useUser();
+
+    fetchUser();
+
+    return { users };
+  }
 };
 </script>
 

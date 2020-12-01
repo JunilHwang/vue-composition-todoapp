@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TodoItem from "@/views/Step1/TodoItem";
+import TodoItem from "./TodoItem";
 
 export default {
   name: "TodoItems",

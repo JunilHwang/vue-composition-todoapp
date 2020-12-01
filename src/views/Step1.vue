@@ -23,9 +23,9 @@
 
 <script>
 import { computed } from "@vue/reactivity";
-import TodoAppender from "@/views/Step1/TodoAppender";
-import TodoFooter from "@/views/Step1/TodoFooter";
-import TodoItems from "@/views/Step1/TodoItems";
+import TodoAppender from "@/views/step1/TodoAppender";
+import TodoFooter from "@/views/step1/TodoFooter";
+import TodoItems from "@/views/step1/TodoItems";
 import useTodo from "@/composition/step1/useTodo";
 import useFilter from "@/composition/step1/useFilter";
 import { FilterTypes } from "@/constants";

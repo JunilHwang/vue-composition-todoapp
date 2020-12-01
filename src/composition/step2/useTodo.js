@@ -17,7 +17,11 @@ export default function useTodo() {
   };
 
   const updateItem = async (userId, itemId, contents) => {
-    await todoServiceOfStep2.updateItemByUserIdAndItemId(userId, itemId, contents);
+    await todoServiceOfStep2.updateItemByUserIdAndItemId(
+      userId,
+      itemId,
+      contents
+    );
     await fetchItems(userId);
   };
 
@@ -31,8 +35,17 @@ export default function useTodo() {
     await fetchItems(userId);
   };
 
-  const removeAllItem = async (userId) => {
+  const removeAllItem = async userId => {
     await todoServiceOfStep2.removeUserItems(userId);
+    await fetchItems(userId);
+  };
+
+  const updatePriorityItem = async (userId, itemId, priority) => {
+    await todoServiceOfStep2.updateItemPriorityByUserIdAndItemId(
+      userId,
+      itemId,
+      priority
+    );
     await fetchItems(userId);
   };
 
@@ -44,5 +57,6 @@ export default function useTodo() {
     toggleItem,
     removeItem,
     removeAllItem,
+    updatePriorityItem
   };
 }

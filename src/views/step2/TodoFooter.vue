@@ -30,7 +30,7 @@
         />
       </li>
     </ul>
-    <button class="clear-completed" @click="$emit('remove-all-item')">
+    <button class="clear-completed" @click="$emit('remove-all')">
       모두 삭제
     </button>
   </div>

@@ -28,6 +28,7 @@
           :count="todoFilteredItems.length"
           :filter-type="filterType"
           @change-filter="changeFilterType"
+          @remove-all="todoHooks.removeAllItem"
         />
       </section>
     </template>

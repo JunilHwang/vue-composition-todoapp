@@ -1,17 +1,7 @@
 <template>
   <section class="main">
     <ul class="todo-list">
-      <li>
-        <div class="view">
-          <label class="label">
-            <div class="animated-background">
-              <div class="skel-mask-container">
-                <div class="skel-mask"></div>
-              </div>
-            </div>
-          </label>
-        </div>
-      </li>
+      <todoItem v-for="item in items" :key="item.id" />
       <li>
         <div class="view">
           <input class="toggle" type="checkbox" />
@@ -68,12 +58,30 @@
         </div>
         <input class="edit" value="완료된 타이틀" />
       </li>
+
+      <li>
+        <div class="view">
+          <label class="label">
+            <div class="animated-background">
+              <div class="skel-mask-container">
+                <div class="skel-mask"></div>
+              </div>
+            </div>
+          </label>
+        </div>
+      </li>
     </ul>
   </section>
 </template>
 
 <script>
+import TodoItem from "./TodoItem";
+
 export default {
-  name: "TodoItems"
+  name: "TodoItems",
+  components: { TodoItem },
+  props: {
+    items: { type: Array, default: () => [] }
+  }
 };
 </script>

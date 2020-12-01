@@ -4,25 +4,29 @@
       <span><strong>eastjun</strong>'s Todo List</span>
     </h1>
     <user-list
-      :users="users"
+      :users="orderedUsers"
       @select-user="fetchItems"
       @remove-user="removeUser"
     />
     <section class="todoapp">
       <todo-appender />
-      <todo-items />
+      <todo-items :todoItems="todoFilteredItems" />
       <todo-footer />
     </section>
   </div>
 </template>
 
 <script>
+import { computed } from "@vue/reactivity";
+
 import UserList from "@/views/step2/UserList";
 import TodoAppender from "@/views/step2/TodoAppender";
 import TodoItems from "@/views/step2/TodoItems";
 import TodoFooter from "@/views/step2/TodoFooter";
 import useUser from "@/composition/step2/useUser";
 import useTodo from "@/composition/step2/useTodo";
+import useFilter from "@/composition/step2/useFilter";
+import { FilterTypes } from "@/constants";
 
 export default {
   name: "Step2",
@@ -40,12 +44,26 @@ export default {
       removeAllItem,
       updatePriorityItem
     } = useTodo();
+    const { filterType, changeFilterType } = useFilter();
 
     fetchUsers();
 
+    const orderedUsers = computed(() =>
+      [...users.value].sort((a, b) => (a.name < b.name ? 1 : -1))
+    );
+
+    const todoFilteredItems = computed(() =>
+      todoItems.value.filter(
+        ({ isCompleted }) =>
+          (filterType.value === FilterTypes.ALL && isCompleted) ||
+          (filterType.value === FilterTypes.COMPLETED && !isCompleted) ||
+          filterType.value === FilterTypes.ALL
+      )
+    );
+
     return {
-      users,
-      todoItems,
+      orderedUsers,
+      todoFilteredItems,
       removeUser,
       fetchItems,
       addItem,
@@ -53,7 +71,8 @@ export default {
       toggleItem,
       removeItem,
       removeAllItem,
-      updatePriorityItem
+      updatePriorityItem,
+      changeFilterType
     };
   }
 };

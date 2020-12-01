@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { reactive, toRefs } from "@vue/reactivity";
 
 export default {
   name: "UserList",
@@ -27,20 +27,22 @@ export default {
   },
 
   setup(props, { emit }) {
-    const selectedUser = ref(null);
+    const state = reactive({
+      selectedUser: null
+    });
 
     const selectUser = id => {
-      selectedUser.value = id;
+      state.selectedUser = id;
       emit("select-user", id);
     };
 
     const removeUser = () => {
-      if (selectedUser.value === null) return;
-      emit("remove-user", selectedUser.value);
+      if (state.selectedUser === 0) return;
+      emit("remove-user", state.selectedUser);
     };
 
     return {
-      selectedUser,
+      ...toRefs(state),
       selectUser,
       removeUser
     };

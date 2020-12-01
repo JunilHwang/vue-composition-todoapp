@@ -1,4 +1,4 @@
-import { reactive, toRef } from "@vue/reactivity";
+import { reactive, toRefs } from "@vue/reactivity";
 import todoServiceOfStep2 from "@/services/todoServiceOfStep2";
 
 export default function useUser() {
@@ -17,7 +17,7 @@ export default function useUser() {
   };
 
   return {
-    users: toRef(state, "users"),
+    ...toRefs(state),
     fetchUsers,
     removeUser
   };

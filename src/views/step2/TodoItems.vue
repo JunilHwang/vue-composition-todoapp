@@ -58,30 +58,27 @@
         </div>
         <input class="edit" value="완료된 타이틀" />
       </li>
-
-      <li>
-        <div class="view">
-          <label class="label">
-            <div class="animated-background">
-              <div class="skel-mask-container">
-                <div class="skel-mask"></div>
-              </div>
-            </div>
-          </label>
-        </div>
-      </li>
+      <template v-if="listLoading">
+        <todo-loading-bar v-for="i in 5" :key="`loading_${i}`" />
+      </template>
+      <template v-if="addLoading">
+        <todo-loading-bar />
+      </template>
     </ul>
   </section>
 </template>
 
 <script>
 import TodoItem from "./TodoItem";
+import TodoLoadingBar from "@/views/step2/TodoLoadingBar";
 
 export default {
   name: "TodoItems",
-  components: { TodoItem },
+  components: { TodoLoadingBar, TodoItem },
   props: {
-    items: { type: Array, default: () => [] }
+    items: { type: Array, default: () => [] },
+    listLoading: { type: Boolean, default: false },
+    addLoading: { type: Boolean, default: false }
   }
 };
 </script>

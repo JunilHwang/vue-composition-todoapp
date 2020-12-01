@@ -1,19 +1,38 @@
-import { reactive, toRef } from "@vue/reactivity";
+import { reactive, toRefs } from "@vue/reactivity";
 import todoServiceOfStep2 from "@/services/todoServiceOfStep2";
 
 export default function useTodo() {
   const state = reactive({
-    todoItems: []
+    userId: null,
+    todoItems: [],
+    listLoading: false,
+    addLoading: false
   });
 
   const fetchItems = async userId => {
-    const items = await todoServiceOfStep2.fetchItemsByUser(userId);
-    state.todoItems = items.map(({ _id, ...item }) => ({ id: _id, ...item }));
+    if (userId !== state.userId) {
+      state.listLoading = true;
+    }
+    try {
+      const items = await todoServiceOfStep2.fetchItemsByUser(userId);
+      state.todoItems = items.map(({ _id, ...item }) => ({ id: _id, ...item }));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.listLoading = false;
+    }
   };
 
   const addItem = async (userId, contents) => {
-    await todoServiceOfStep2.addItemByUser(userId, contents);
-    await fetchItems(userId);
+    state.addLoading = true;
+    try {
+      await todoServiceOfStep2.addItemByUser(userId, contents);
+      await fetchItems(userId);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.addLoading = false;
+    }
   };
 
   const updateItem = async (userId, itemId, contents) => {
@@ -50,7 +69,7 @@ export default function useTodo() {
   };
 
   return {
-    todoItems: toRef(state, "todoItems"),
+    ...toRefs(state),
     fetchItems,
     addItem,
     updateItem,

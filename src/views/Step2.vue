@@ -11,7 +11,11 @@
     />
     <section class="todoapp">
       <todo-appender />
-      <todo-items :todoItems="todoFilteredItems" />
+      <todo-items
+        :todoItems="todoFilteredItems"
+        :list-loading="listLoading"
+        :add-loading="addLoading"
+      />
       <todo-footer />
     </section>
   </div>
@@ -37,6 +41,8 @@ export default {
     const { users, fetchUsers, addUser, removeUser } = useUser();
     const {
       todoItems,
+      listLoading,
+      addLoading,
       fetchItems,
       addItem,
       updateItem,
@@ -65,6 +71,8 @@ export default {
     return {
       orderedUsers,
       todoFilteredItems,
+      listLoading,
+      addLoading,
       removeUser,
       addUser,
       fetchItems,

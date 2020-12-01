@@ -1,6 +1,9 @@
 <template>
   <section>
     <div id="user-list">
+      <button v-for="">
+
+      </button>
       <button class="ripple active">eastjun</button>
       <button class="ripple">westjun</button>
       <button class="ripple">southjun</button>
@@ -14,5 +17,8 @@
 <script>
 export default {
   name: "UserList",
+  props: {
+    users: { type: Array, default: () => [] }
+  }
 };
 </script>

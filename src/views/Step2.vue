@@ -3,7 +3,7 @@
     <h1 id="user-title" data-username="eastjun">
       <span><strong>eastjun</strong>'s Todo List</span>
     </h1>
-    <user-list />
+    <user-list :users="users" />
     <section class="todoapp">
       <todo-appender />
       <todo-items />
@@ -18,17 +18,40 @@ import TodoAppender from "@/views/step2/TodoAppender";
 import TodoItems from "@/views/step2/TodoItems";
 import TodoFooter from "@/views/step2/TodoFooter";
 import useUser from "@/composition/step2/useUser";
+import useTodo from "@/composition/step2/useTodo";
 
 export default {
   name: "Step2",
   components: { TodoItems, TodoAppender, UserList, TodoFooter },
 
   setup() {
-    const { users, fetchUser } = useUser();
+    const { users, fetchUser, removeUser } = useUser();
+    const {
+      todoItems,
+      fetchItems,
+      addItem,
+      updateItem,
+      toggleItem,
+      removeItem,
+      removeAllItem,
+      updatePriorityItem
+    } = useTodo();
 
     fetchUser();
 
-    return { users };
+    return {
+      users,
+      todoItems,
+      fetchUser,
+      removeUser,
+      fetchItems,
+      addItem,
+      updateItem,
+      toggleItem,
+      removeItem,
+      removeAllItem,
+      updatePriorityItem
+    };
   }
 };
 </script>

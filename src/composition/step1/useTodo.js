@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, toRef } from "vue";
 
 export default function useTodo() {
   const state = reactive({
@@ -72,7 +72,7 @@ export default function useTodo() {
   };
 
   return {
-    todoItems: state.todoItems,
+    todoItems: toRef(state, "todoItems"),
     addItem,
     editingItem,
     updateItem,

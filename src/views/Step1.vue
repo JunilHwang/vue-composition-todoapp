@@ -35,7 +35,9 @@ export default {
       deleteItem
     } = useTodo();
 
-    const items = computed(() => todoItems.ids.map(v => todoItems.entities[v]));
+    const items = computed(() =>
+      todoItems.value.ids.map(v => todoItems.value.entities[v])
+    );
 
     return {
       items,

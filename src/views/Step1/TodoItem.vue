@@ -14,7 +14,7 @@
       v-if="editing"
       class="edit"
       :value="contents"
-      ref="$editor"
+      :ref="el => (editor = el)"
       @keydown.enter="handleUpdate"
       @keydown.esc="handleCancel"
     />
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, nextTick, ref } from "vue";
 
 export default {
   name: "TodoItem",
@@ -35,6 +35,7 @@ export default {
   },
 
   setup(props, context) {
+    const editor = ref(null);
     const className = computed(() => {
       const { editing, completed } = props;
       return editing ? "editing" : completed ? "completed" : "";
@@ -42,6 +43,7 @@ export default {
 
     const handleEditing = () => {
       context.emit("editing", props.id);
+      nextTick(() => editor.value.focus());
     };
 
     const handleUpdate = ({ target }) => {
@@ -52,7 +54,7 @@ export default {
       context.emit("update", { id: props.id, contents: props.contents });
     };
 
-    return { className, handleEditing, handleUpdate, handleCancel };
+    return { className, editor, handleEditing, handleUpdate, handleCancel };
   }
 };
 </script>

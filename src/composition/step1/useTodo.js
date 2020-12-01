@@ -71,11 +71,26 @@ export default function useTodo() {
     };
   };
 
+  const toggleItem = id => {
+    const { entities, ids } = state.todoItems;
+    state.todoItems = {
+      entities: {
+        ...entities,
+        [id]: {
+          ...entities[id],
+          completed: !entities[id].completed
+        }
+      },
+      ids: [...ids]
+    };
+  };
+
   return {
     todoItems: toRef(state, "todoItems"),
     addItem,
     editingItem,
     updateItem,
-    deleteItem
+    deleteItem,
+    toggleItem
   };
 }

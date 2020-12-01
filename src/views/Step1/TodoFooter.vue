@@ -1,23 +1,54 @@
 <template>
   <div class="count-container">
-    <span class="todo-count">총 <strong>0</strong> 개</span>
+    <span class="todo-count">총 <strong v-html="count" /> 개</span>
     <ul class="filters">
       <li>
-        <a class="all selected" href="#all">전체보기</a>
+        <a
+          href="#"
+          class="all"
+          :class="{ selected: filterType === FilterTypes.ALL }"
+          @click.prevent="$emit('change-filter', FilterTypes.ALL)"
+        >
+          전체보기
+        </a>
       </li>
       <li>
-        <a class="active" href="#active">해야할 일</a>
+        <a
+          href="#"
+          class="active"
+          :class="{ selected: filterType === FilterTypes.ACTIVE }"
+          @click.prevent="$emit('change-filter', FilterTypes.ACTIVE)"
+        >
+          해야할 일
+        </a>
       </li>
       <li>
-        <a class="completed" href="#completed">완료한 일</a>
+        <a
+          href="#"
+          class="completed"
+          :class="{ selected: filterType === FilterTypes.COMPLETED }"
+          @click.prevent="$emit('change-filter', FilterTypes.COMPLETED)"
+        >
+          완료한 일
+        </a>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { FilterTypes } from "@/composition/step1/useFilter";
+
 export default {
-  name: "TodoFooter"
+  name: "TodoFooter",
+  props: {
+    filterType: { type: String, default: FilterTypes.ALL },
+    count: { type: Number, default: 0 }
+  },
+
+  setup() {
+    return { FilterTypes };
+  }
 };
 </script>
 

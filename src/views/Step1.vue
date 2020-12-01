@@ -11,18 +11,23 @@
           @delete-item="deleteItem"
           @toggle-item="toggleItem"
         />
-        <todo-footer />
+        <todo-footer
+          :count="items.length"
+          :filter-type="filterType"
+          @change-filter="changeFilterType"
+        />
       </main>
     </div>
   </div>
 </template>
 
 <script>
+import { computed } from "@vue/reactivity";
 import TodoAppender from "@/views/Step1/TodoAppender";
 import TodoFooter from "@/views/Step1/TodoFooter";
 import TodoItems from "@/views/Step1/TodoItems";
 import useTodo from "@/composition/step1/useTodo";
-import { computed } from "vue";
+import useFilter, { FilterTypes } from "@/composition/step1/useFilter";
 
 export default {
   name: "Step1",
@@ -36,9 +41,17 @@ export default {
       deleteItem,
       toggleItem
     } = useTodo();
+    const { filterType, changeFilterType } = useFilter();
 
     const items = computed(() =>
-      todoItems.value.ids.map(v => todoItems.value.entities[v])
+      todoItems.value.ids
+        .map(id => todoItems.value.entities[id])
+        .filter(
+          ({ completed }) =>
+            (filterType.value === FilterTypes.COMPLETED && completed) ||
+            (filterType.value === FilterTypes.ACTIVE && !completed) ||
+            filterType.value === FilterTypes.ALL
+        )
     );
 
     return {
@@ -47,7 +60,9 @@ export default {
       updateItem,
       editingItem,
       deleteItem,
-      toggleItem
+      toggleItem,
+      changeFilterType,
+      filterType
     };
   }
 };

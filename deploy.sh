@@ -12,11 +12,13 @@ cd dist
 # if you are deploying to a custom domain
 # echo 'www.example.com' > CNAME
 
-git init
+git clone -b gh-pages https://github.com/JunilHwang/vue-composition-todoapp/
+cp -rf TIL/.git ./.git
+rm -rf TIL
+
 git add -A
 git commit -m "deploy $(date +%Y%m%d %H%M)"
 
-# if you are deploying to https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:junilhwang/vue-composition-todoapp.git HEAD:gh-pages
+git push origin gh-pages
 
 cd -

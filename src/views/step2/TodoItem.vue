@@ -10,7 +10,7 @@
       <label class="label" @dblclick="editContents(true)">
         <select
           class="chip select"
-          v-if="editingPriority"
+          v-if="editingPriority || priority === PriorityTypes.NONE"
           @change="updatePriority"
         >
           <option
@@ -80,7 +80,7 @@ export default {
     };
 
     const updatePriority = ({ target }) => {
-      emit("update-priority", target.value);
+      emit("update-priority", props.id, target.value);
       state.editingPriority = false;
     };
 

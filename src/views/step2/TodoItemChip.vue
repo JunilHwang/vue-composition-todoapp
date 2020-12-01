@@ -1,5 +1,11 @@
 <template>
-  <span v-if="show" class="chip" :class="className" v-html="text" />
+  <span
+    v-if="show"
+    class="chip"
+    :class="className"
+    @click="$emit('edit-priority')"
+    v-html="text"
+  />
 </template>
 
 <script>

@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { computed } from "vue";
+
 export default {
   name: "TodoItem",
 
@@ -19,11 +21,13 @@ export default {
     editing: { type: Boolean, default: false }
   },
 
-  computed: {
-    className() {
-      const { editing, completed } = this;
+  setup(props) {
+    const className = computed(() => {
+      const { editing, completed } = props;
       return editing ? "editing" : completed ? "completed" : "";
-    }
+    });
+
+    return { className };
   }
 };
 </script>

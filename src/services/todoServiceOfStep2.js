@@ -11,6 +11,9 @@ export const removeUser = userId => todoClient.delete(`/user/${userId}`);
 export const fetchItemsByUser = userId =>
   todoClient.get(`/user/${userId}/items`);
 
+export const addItemByUser = (userId, contents) =>
+  todoClient.post(`/user/${userId}/items`, { contents });
+
 export const removeUserItems = userId =>
   todoClient.delete(`/user/${userId}/items`);
 
@@ -32,6 +35,7 @@ export default {
   fetchUser,
   removeUser,
   fetchItemsByUser,
+  addItemByUser,
   removeUserItems,
   removeUserItemById,
   updateItemByUserIdAndItemId,

@@ -63,8 +63,8 @@ export default {
     const todoFilteredItems = computed(() =>
       todoItems.value.filter(
         ({ isCompleted }) =>
-          (filterType.value === FilterTypes.ALL && isCompleted) ||
-          (filterType.value === FilterTypes.COMPLETED && !isCompleted) ||
+          (filterType.value === FilterTypes.COMPLETED && isCompleted) ||
+          (filterType.value === FilterTypes.ACTIVE && !isCompleted) ||
           filterType.value === FilterTypes.ALL
       )
     );

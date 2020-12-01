@@ -7,10 +7,17 @@
         :checked="completed"
         @change="$emit('toggle', id)"
       />
-      <label class="label" v-html="contents" />
+      <label class="label" v-html="contents" @dblclick="handleEditing" />
       <button class="destroy"></button>
     </div>
-    <input v-if="editing" class="edit" :value="contents" />
+    <input
+      v-if="editing"
+      class="edit"
+      :value="contents"
+      ref="$editor"
+      @keydown.enter="handleUpdate"
+      @keydown.esc="handleCancel"
+    />
   </li>
 </template>
 
@@ -27,13 +34,25 @@ export default {
     editing: { type: Boolean, default: false }
   },
 
-  setup(props) {
+  setup(props, context) {
     const className = computed(() => {
       const { editing, completed } = props;
       return editing ? "editing" : completed ? "completed" : "";
     });
 
-    return { className };
+    const handleEditing = () => {
+      context.emit("editing", props.id);
+    };
+
+    const handleUpdate = ({ target }) => {
+      context.emit("update", { id: props.id, contents: target.value });
+    };
+
+    const handleCancel = () => {
+      context.emit("update", { id: props.id, contents: props.contents });
+    };
+
+    return { className, handleEditing, handleUpdate, handleCancel };
   }
 };
 </script>

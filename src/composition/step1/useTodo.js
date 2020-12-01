@@ -46,9 +46,11 @@ export default function useTodo() {
   const editingItem = id => {
     const { entities, ids } = state.todoItems;
     state.todoItems = {
-      ...entities,
-      [id]: { ...entities[id], editing: true },
-      ...ids
+      entities: {
+        ...entities,
+        [id]: { ...entities[id], editing: true }
+      },
+      ids: [...ids]
     };
   };
 

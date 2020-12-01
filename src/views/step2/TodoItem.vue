@@ -1,13 +1,17 @@
 <template>
-  <li>
+  <li :class="className">
     <div class="view">
-      <input class="toggle" type="checkbox" />
+      <input class="toggle" type="checkbox" :checked="isCompleted" />
       <label class="label">
-        <select class="chip select">
+        <select class="chip select" v-if="editingPriority">
           <option value="0" selected>순위</option>
           <option value="1">1순위</option>
           <option value="2">2순위</option>
         </select>
+        <template v-else>
+          <span class="chip primary" v-if="priority === PriorityTypes.FIRST">1순위</span>
+          <span class="chip primary" v-if="priority === PriorityTypes.FIRST">1순위</span>
+        </template>
         해야할 아이템
       </label>
       <button class="destroy"></button>
@@ -17,7 +21,9 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "@vue/reactivity";
+import { computed, reactive, toRefs } from "@vue/reactivity";
+
+import {PriorityTypes} from "@/constants";
 
 export default {
   name: "TodoItem",
@@ -29,13 +35,22 @@ export default {
     priority: { type: String, required: true }
   },
 
-  setup() {
+  setup(props) {
     const state = reactive({
-      editing: false
+      editingContents: false,
+      editingPriority: false,
+    });
+
+    const className = computed(() => {
+      if (state.editingContents) return "editing";
+      if (props.isCompleted) return "completed";
+      return null;
     });
 
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      className,
+      PriorityTypes,
     };
   }
 };

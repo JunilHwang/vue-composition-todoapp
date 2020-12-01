@@ -1,24 +1,39 @@
 <template>
   <section>
     <div id="user-list">
-      <button v-for="">
-
-      </button>
-      <button class="ripple active">eastjun</button>
-      <button class="ripple">westjun</button>
-      <button class="ripple">southjun</button>
-      <button class="ripple">northjun</button>
-      <button class="ripple">hojun</button>
+      <button
+        v-for="{ id, name } in users"
+        :key="id"
+        class="ripple"
+        :class="{ active: selectedUser === id }"
+        @click="selectUser(id)"
+        v-html="name"
+      />
       <button class="ripple user-create-button">+ 유저 생성</button>
+      <button class="ripple user-create-button">- 선택 삭제</button>
     </div>
   </section>
 </template>
 
 <script>
+import { ref } from "@vue/reactivity";
+
 export default {
   name: "UserList",
   props: {
     users: { type: Array, default: () => [] }
+  },
+
+  setup() {
+    const selectedUser = ref(null);
+    const selectUser = id => {
+      selectedUser.value = id;
+    };
+
+    return {
+      selectedUser,
+      selectUser
+    };
   }
 };
 </script>

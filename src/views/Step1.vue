@@ -29,13 +29,14 @@ import TodoItems from "@/views/step1/TodoItems";
 import useTodo from "@/composition/step1/useTodo";
 import useFilter from "@/composition/step1/useFilter";
 import { FilterTypes } from "@/constants";
+import { useStore } from "vuex";
 
 export default {
   name: "Step1",
   components: { TodoItems, TodoFooter, TodoAppender },
   setup() {
+    const { todoItems } = useStore().state.step1;
     const {
-      todoItems,
       addItem,
       updateItem,
       editingItem,
@@ -45,8 +46,8 @@ export default {
     const { filterType, changeFilterType } = useFilter();
 
     const items = computed(() =>
-      todoItems.value.ids
-        .map(id => todoItems.value.entities[id])
+      todoItems.ids
+        .map(id => todoItems.entities[id])
         .filter(
           ({ completed }) =>
             (filterType.value === FilterTypes.COMPLETED && completed) ||

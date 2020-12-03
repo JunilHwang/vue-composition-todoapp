@@ -5,6 +5,8 @@ export const SET_TODO_ITEMS = "SET_TODO_ITEMS";
 export const SET_FILTER_TYPE = "SET_FILTER_TYPE";
 
 const step1 = {
+  namespaced: true,
+
   state: {
     todoItems: todoServiceOfStep1.fetchTodoItems().reduce(
       (obj, item) => {

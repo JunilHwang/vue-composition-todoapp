@@ -35,7 +35,7 @@ export default {
   name: "Step1",
   components: { TodoItems, TodoFooter, TodoAppender },
   setup() {
-    const { todoItems } = useStore().state.step1;
+    const store = useStore();
     const {
       addItem,
       updateItem,
@@ -45,16 +45,17 @@ export default {
     } = useTodo();
     const { filterType, changeFilterType } = useFilter();
 
-    const items = computed(() =>
-      todoItems.ids
-        .map(id => todoItems.entities[id])
+    const items = computed(() => {
+      const { ids, entities } = store.state.step1.todoItems;
+      return ids
+        .map(id => entities[id])
         .filter(
           ({ completed }) =>
             (filterType.value === FilterTypes.COMPLETED && completed) ||
             (filterType.value === FilterTypes.ACTIVE && !completed) ||
             filterType.value === FilterTypes.ALL
-        )
-    );
+        );
+    });
 
     return {
       items,

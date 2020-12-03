@@ -32,7 +32,17 @@ const step2 = {
 
   getters: {
     selectedUser: ({ users, selectedUserId }) =>
-      users.find(({ _id }) => _id === selectedUserId)
+      users.find(({ _id }) => _id === selectedUserId),
+
+    filteredTodoItems: ({ filterType, todoItems: { ids, entities } }) =>
+      ids
+        .map(id => entities[id])
+        .filter(
+          ({ completed }) =>
+            (filterType === FilterTypes.COMPLETED && completed) ||
+            (filterType === FilterTypes.ACTIVE && !completed) ||
+            filterType === FilterTypes.ALL
+        )
   },
 
   mutations: {

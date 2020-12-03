@@ -1,31 +1,31 @@
 <template>
   <div class="step2">
     <user-list
-      :users="userHooks.orderedUsers"
-      :selected-user="userHooks.selectedUserId"
+      :users="userHooks.orderedUsers.value"
+      :selected-user="userHooks.selectedUserId.value"
       @add-user="userHooks.addUser"
       @select-user="userHooks.selectUser"
       @remove-user="userHooks.removeUser"
       @fetch-items="todoHooks.fetchItems"
       @reset-items="todoHooks.resetItems"
     />
-    <template v-if="userHooks.selectedUser">
+    <template v-if="userHooks.selectedUserId.value !== null">
       <h1 id="user-title">
         <span><strong v-html="userHooks.selectedUser.name" />'s Todo List</span>
       </h1>
       <section class="todoapp">
         <todo-appender @add-item="todoHooks.addItem" />
         <todo-items
-          :todo-items="todoHooks.filteredTodoItems"
-          :list-loading="todoHooks.listLoading"
-          :append-loading="todoHooks.appendLoading"
+          :todo-items="todoHooks.filteredTodoItems.value"
+          :list-loading="todoHooks.listLoading.value"
+          :append-loading="todoHooks.appendLoading.value"
           @update-item="todoHooks.updateItem"
           @remove-item="todoHooks.removeItem"
           @toggle-item="todoHooks.toggleItem"
           @update-priority="todoHooks.updatePriority"
         />
         <todo-footer
-          :count="todoHooks.filteredTodoItems.length"
+          :count="todoHooks.filteredTodoItems.value.length"
           :filter-type="filterType"
           @change-filter="changeFilterType"
           @remove-all="todoHooks.removeAllItem"

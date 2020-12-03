@@ -13,7 +13,7 @@
       <template v-if="listLoading">
         <todo-loading-bar v-for="i in 5" :key="`loading_${i}`" />
       </template>
-      <template v-if="addLoading">
+      <template v-if="appendLoading">
         <todo-loading-bar />
       </template>
     </ul>

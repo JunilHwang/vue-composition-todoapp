@@ -80,12 +80,18 @@ export default {
     };
 
     const updatePriority = ({ target }) => {
-      emit("update-priority", props.id, target.value);
+      emit("update-priority", {
+        itemId: props.id,
+        priority: target.value
+      });
       state.editingPriority = false;
     };
 
     const updateItem = ({ target }) => {
-      emit("update-item", props.id, target.value);
+      emit("update-item", {
+        itemId: props.id,
+        contents: target.value
+      });
       editContents(false);
     };
 

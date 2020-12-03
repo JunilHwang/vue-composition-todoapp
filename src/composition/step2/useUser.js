@@ -13,6 +13,7 @@ export default function useUser() {
     "orderedUsers",
     "selectedUser"
   ]);
+
   const [selectUser] = mapMutations([SET_USER]);
   const [fetchUsers, addUser, removeUser] = mapActions([
     FETCH_USERS,

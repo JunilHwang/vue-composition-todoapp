@@ -23,7 +23,7 @@ const step2 = {
   namespaced: true,
   state: {
     users: [],
-    selectedUserId: -1,
+    selectedUserId: null,
     todoItems: [],
     listLoading: false,
     appendLoading: false,
@@ -32,20 +32,18 @@ const step2 = {
 
   getters: {
     orderedUsers: ({ users }) =>
-      [...users.value].sort((a, b) => (a.name < b.name ? 1 : -1)),
+      [...users].sort((a, b) => (a.name < b.name ? 1 : -1)),
 
     selectedUser: ({ users, selectedUserId }) =>
       users.find(({ _id }) => _id === selectedUserId),
 
-    filteredTodoItems: ({ filterType, todoItems: { ids, entities } }) =>
-      ids
-        .map(id => entities[id])
-        .filter(
-          ({ completed }) =>
-            (filterType === FilterTypes.COMPLETED && completed) ||
-            (filterType === FilterTypes.ACTIVE && !completed) ||
-            filterType === FilterTypes.ALL
-        )
+    filteredTodoItems: ({ filterType, todoItems }) =>
+      todoItems.filter(
+        ({ isCompleted }) =>
+          (filterType === FilterTypes.COMPLETED && isCompleted) ||
+          (filterType === FilterTypes.ACTIVE && !isCompleted) ||
+          filterType === FilterTypes.ALL
+      )
   },
 
   mutations: {
@@ -78,9 +76,10 @@ const step2 = {
       );
     },
 
-    async [ADD_USER]({ dispatch }, name) {
-      await todoServiceOfStep2.addUser(name);
-      return dispatch(FETCH_USERS);
+    async [ADD_USER]({ dispatch, commit }, name) {
+      const { _id } = await todoServiceOfStep2.addUser(name);
+      await dispatch(FETCH_USERS);
+      commit(SET_USER, _id);
     },
 
     async [REMOVE_USER]({ dispatch, state }) {

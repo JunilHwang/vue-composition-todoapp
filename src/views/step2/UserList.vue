@@ -24,7 +24,7 @@ export default {
   name: "UserList",
   props: {
     users: { type: Array, default: () => [] },
-    selectedUser: { type: String, default: "" }
+    selectedUser: { type: String, default: null }
   },
 
   setup(props, { emit }) {

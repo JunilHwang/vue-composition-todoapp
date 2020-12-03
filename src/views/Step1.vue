@@ -36,6 +36,7 @@ export default {
   components: { TodoItems, TodoFooter, TodoAppender },
   setup() {
     const store = useStore();
+
     const {
       addItem,
       updateItem,
@@ -43,6 +44,7 @@ export default {
       deleteItem,
       toggleItem
     } = useTodo();
+
     const { filterType, changeFilterType } = useFilter();
 
     const items = computed(() => {

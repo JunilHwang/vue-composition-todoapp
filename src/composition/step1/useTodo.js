@@ -1,17 +1,15 @@
-import { useStore } from "vuex";
+import useStoreModuleMapper from "@/composition/store/useStoreModuleMapper";
 import { SET_TODO_ITEMS } from "@/store/step1";
 
 export default function useTodo() {
-  const store = useStore();
-
-  const getTodoItems = () => {
-    return store.state.step1.todoItems;
-  };
+  const { mapState, mapMutations } = useStoreModuleMapper("step1");
+  const [todoItems] = mapState(["todoItems"]);
+  const [setTodoItems] = mapMutations([SET_TODO_ITEMS]);
 
   const addItem = contents => {
-    const { entities, ids } = getTodoItems();
+    const { entities, ids } = todoItems.value;
     const id = Math.max(...ids, 0) + 1;
-    store.commit(SET_TODO_ITEMS, {
+    setTodoItems({
       entities: {
         ...entities,
         [id]: { id, contents, completed: false, editing: false }
@@ -21,8 +19,8 @@ export default function useTodo() {
   };
 
   const editingItem = id => {
-    const { entities, ids } = getTodoItems();
-    store.commit(SET_TODO_ITEMS, {
+    const { entities, ids } = todoItems.value;
+    setTodoItems({
       entities: {
         ...entities,
         [id]: { ...entities[id], editing: true }
@@ -32,8 +30,8 @@ export default function useTodo() {
   };
 
   const updateItem = ({ id, contents }) => {
-    const { entities, ids } = getTodoItems();
-    store.commit(SET_TODO_ITEMS, {
+    const { entities, ids } = todoItems.value;
+    setTodoItems({
       entities: {
         ...entities,
         [id]: { ...entities[id], contents, editing: false }
@@ -43,8 +41,8 @@ export default function useTodo() {
   };
 
   const deleteItem = id => {
-    const { entities, ids } = getTodoItems();
-    store.commit(SET_TODO_ITEMS, {
+    const { entities, ids } = todoItems.value;
+    setTodoItems({
       ids: ids.filter(v => v !== id),
       entities: Object.keys(entities).reduce((obj, v) => {
         if (v !== id) obj[v] = entities[v];
@@ -54,8 +52,8 @@ export default function useTodo() {
   };
 
   const toggleItem = id => {
-    const { entities, ids } = getTodoItems();
-    store.commit(SET_TODO_ITEMS, {
+    const { entities, ids } = todoItems.value;
+    setTodoItems({
       entities: {
         ...entities,
         [id]: {

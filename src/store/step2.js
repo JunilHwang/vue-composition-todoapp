@@ -6,7 +6,7 @@ export const SET_USER = "SET_USER";
 export const SET_TODO_ITEMS = "SET_TODO_ITEMS";
 export const SET_LIST_LOADING = "SET_LIST_LOADING";
 export const SET_APPEND_LOADING = "SET_APPEND_LOADING";
-export const SET_FILTER_TYPES = "SET_FILTER_TYPES";
+export const SET_FILTER_TYPE = "SET_FILTER_TYPE";
 
 export const FETCH_USERS = "FETCH_USERS";
 export const ADD_USER = "ADD_USER";
@@ -61,7 +61,7 @@ const step2 = {
     [SET_APPEND_LOADING](state, appendLoading) {
       state.appendLoading = appendLoading;
     },
-    [SET_FILTER_TYPES](state, filterType) {
+    [SET_FILTER_TYPE](state, filterType) {
       state.filterType = filterType;
     }
   },
@@ -69,7 +69,10 @@ const step2 = {
   actions: {
     async [FETCH_USERS]({ commit }) {
       const users = await todoServiceOfStep2.fetchUsers();
-      commit(SET_USERS, users);
+      commit(
+        SET_USERS,
+        users.map(({ _id, name }) => ({ id: _id, name }))
+      );
     },
 
     async [ADD_USER]({ dispatch }, name) {
@@ -88,19 +91,33 @@ const step2 = {
       if (userId !== state.selectedUserId) {
         commit(SET_LIST_LOADING, true);
       }
-      const items = await todoServiceOfStep2.fetchItemsByUser(
-        state.selectedUserId
-      );
-      commit(SET_TODO_ITEMS, items);
-      commit(SET_USER, userId);
-      commit(SET_LIST_LOADING, false);
+      try {
+        const items = await todoServiceOfStep2.fetchItemsByUser(
+          state.selectedUserId
+        );
+        commit(
+          SET_TODO_ITEMS,
+          items.map(({ _id, ...item }) => ({ id: _id, ...item }))
+        );
+      } catch (e) {
+        commit(SET_TODO_ITEMS, []);
+        console.error(e);
+      } finally {
+        commit(SET_USER, userId);
+        commit(SET_LIST_LOADING, false);
+      }
     },
 
     async [ADD_ITEM]({ dispatch, state, commit }, contents) {
       commit(SET_APPEND_LOADING, true);
-      await todoServiceOfStep2.addItemByUser(state.selectedUserId, contents);
-      await dispatch(FETCH_ITEMS);
-      commit(SET_APPEND_LOADING, false);
+      try {
+        await todoServiceOfStep2.addItemByUser(state.selectedUserId, contents);
+        await dispatch(FETCH_ITEMS);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        commit(SET_APPEND_LOADING, false);
+      }
     },
 
     async [UPDATE_ITEM]({ dispatch, state }, { itemId, contents }) {

@@ -1,55 +1,17 @@
 import { reactive, toRefs } from "@vue/reactivity";
 
 import todoServiceOfStep2 from "@/services/todoServiceOfStep2";
+import useStoreModuleMapper from "@/composition/store/useStoreModuleMapper";
+import {ADD_ITEM, FETCH_ITEMS, SET_TODO_ITEMS, SET_USER, UPDATE_ITEM} from "@/store/step2";
 
 export default function useTodo() {
-  const state = reactive({
-    nowUserId: null,
-    todoItems: [],
-    listLoading: false,
-    addLoading: false
-  });
-
-  const fetchItems = async (userId = state.nowUserId) => {
-    if (userId !== state.nowUserId) {
-      state.listLoading = true;
-      state.nowUserId = userId;
-    }
-    try {
-      const items = await todoServiceOfStep2.fetchItemsByUser(userId);
-      state.todoItems = items.map(({ _id, ...item }) => ({ id: _id, ...item }));
-    } catch (e) {
-      state.todoItems = [];
-      console.error(e);
-    } finally {
-      state.listLoading = false;
-    }
-  };
+  const { mapActions, mapMutations } = useStoreModuleMapper("step2");
+  const [setTodoItems, setUser] = mapMutations([SET_TODO_ITEMS, SET_USER]);
+  const [fetchItems, addItem, updateItem] = mapActions([FETCH_ITEMS, ADD_ITEM, UPDATE_ITEM]);
 
   const resetItems = () => {
-    state.todoItems = [];
-    state.nowUserId = null;
-  };
-
-  const addItem = async contents => {
-    state.addLoading = true;
-    try {
-      await todoServiceOfStep2.addItemByUser(state.nowUserId, contents);
-      await fetchItems();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      state.addLoading = false;
-    }
-  };
-
-  const updateItem = async (itemId, contents) => {
-    await todoServiceOfStep2.updateItemByUserIdAndItemId(
-      state.nowUserId,
-      itemId,
-      contents
-    );
-    await fetchItems();
+    setTodoItems([]);
+    setUser(-1);
   };
 
   const toggleItem = async itemId => {

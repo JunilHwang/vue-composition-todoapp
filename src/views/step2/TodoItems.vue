@@ -30,7 +30,7 @@ export default {
   props: {
     todoItems: { type: Array, default: () => [] },
     listLoading: { type: Boolean, default: false },
-    addLoading: { type: Boolean, default: false }
+    appendLoading: { type: Boolean, default: false }
   }
 };
 </script>

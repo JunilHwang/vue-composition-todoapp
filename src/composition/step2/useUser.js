@@ -1,4 +1,3 @@
-import todoServiceOfStep2 from "@/services/todoServiceOfStep2";
 import useStoreModuleMapper from "@/composition/store/useStoreModuleMapper";
 import { ADD_USER, FETCH_USERS, REMOVE_USER, SET_USER } from "@/store/step2";
 
@@ -10,7 +9,10 @@ export default function useUser() {
     mapMutations
   } = useStoreModuleMapper("step2");
   const [selectedUserId] = mapState(["selectedUserId"]);
-  const [selectedUser] = mapGetters(["selectedUser"]);
+  const [orderedUsers, selectedUser] = mapGetters([
+    "orderedUsers",
+    "selectedUser"
+  ]);
   const [selectUser] = mapMutations([SET_USER]);
   const [fetchUsers, addUser, removeUser] = mapActions([
     FETCH_USERS,
@@ -20,6 +22,7 @@ export default function useUser() {
 
   return {
     selectedUserId,
+    orderedUsers,
     selectedUser,
     selectUser,
     fetchUsers,

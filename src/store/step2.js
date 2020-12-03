@@ -31,6 +31,9 @@ const step2 = {
   },
 
   getters: {
+    orderedUsers: ({ users }) =>
+      [...users.value].sort((a, b) => (a.name < b.name ? 1 : -1)),
+
     selectedUser: ({ users, selectedUserId }) =>
       users.find(({ _id }) => _id === selectedUserId),
 

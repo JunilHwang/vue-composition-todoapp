@@ -1,31 +1,31 @@
 <template>
   <div class="step2">
     <user-list
-      :users="orderedUsers"
-      :selected-user="selectedUserId"
+      :users="userHooks.orderedUsers"
+      :selected-user="userHooks.selectedUserId"
       @add-user="userHooks.addUser"
       @select-user="userHooks.selectUser"
       @remove-user="userHooks.removeUser"
       @fetch-items="todoHooks.fetchItems"
       @reset-items="todoHooks.resetItems"
     />
-    <template v-if="selectedUser">
+    <template v-if="userHooks.selectedUser">
       <h1 id="user-title">
-        <span><strong v-html="selectedUser.name" />'s Todo List</span>
+        <span><strong v-html="userHooks.selectedUser.name" />'s Todo List</span>
       </h1>
       <section class="todoapp">
         <todo-appender @add-item="todoHooks.addItem" />
         <todo-items
-          :todo-items="todoFilteredItems"
-          :list-loading="listLoading"
-          :add-loading="addLoading"
+          :todo-items="todoHooks.filteredTodoItems"
+          :list-loading="todoHooks.listLoading"
+          :append-loading="todoHooks.appendLoading"
           @update-item="todoHooks.updateItem"
           @remove-item="todoHooks.removeItem"
           @toggle-item="todoHooks.toggleItem"
           @update-priority="todoHooks.updatePriority"
         />
         <todo-footer
-          :count="todoFilteredItems.length"
+          :count="todoHooks.filteredTodoItems.length"
           :filter-type="filterType"
           @change-filter="changeFilterType"
           @remove-all="todoHooks.removeAllItem"
@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import { computed } from "@vue/reactivity";
-
 import UserList from "@/views/step2/UserList";
 import TodoAppender from "@/views/step2/TodoAppender";
 import TodoItems from "@/views/step2/TodoItems";
@@ -45,45 +43,21 @@ import TodoFooter from "@/views/step2/TodoFooter";
 import useUser from "@/composition/step2/useUser";
 import useTodo from "@/composition/step2/useTodo";
 import useFilter from "@/composition/step2/useFilter";
-import { FilterTypes } from "@/constants";
 
 export default {
   name: "Step2",
   components: { TodoItems, TodoAppender, UserList, TodoFooter },
 
   setup() {
-    const { users, selectedUserId, ...userHooks } = useUser();
-    const { todoItems, listLoading, addLoading, ...todoHooks } = useTodo();
+    const userHooks = useUser();
+    const todoHooks = useTodo();
     const { filterType, changeFilterType } = useFilter();
 
     userHooks.fetchUsers();
 
-    const orderedUsers = computed(() =>
-      [...users.value].sort((a, b) => (a.name < b.name ? 1 : -1))
-    );
-
-    const todoFilteredItems = computed(() =>
-      todoItems.value.filter(
-        ({ isCompleted }) =>
-          (filterType.value === FilterTypes.COMPLETED && isCompleted) ||
-          (filterType.value === FilterTypes.ACTIVE && !isCompleted) ||
-          filterType.value === FilterTypes.ALL
-      )
-    );
-
-    const selectedUser = computed(() =>
-      orderedUsers.value.find(user => user.id === selectedUserId.value)
-    );
-
     return {
       userHooks,
       todoHooks,
-      selectedUserId,
-      selectedUser,
-      orderedUsers,
-      todoFilteredItems,
-      listLoading,
-      addLoading,
       filterType,
       changeFilterType
     };

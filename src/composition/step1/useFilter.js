@@ -1,16 +1,13 @@
-import { useStore } from "vuex";
+import useStoreModuleMapper from "@/composition/store/useStoreModuleMapper";
 import { SET_FILTER_TYPE } from "@/store/step1";
-import { computed } from "@vue/reactivity";
 
 export default function useFilter() {
-  const store = useStore();
-
-  const changeFilterType = filterType => {
-    store.commit(SET_FILTER_TYPE, filterType);
-  };
+  const { mapState, mapMutations } = useStoreModuleMapper("step1");
+  const [filterType] = mapState(["filterType"]);
+  const [changeFilterType] = mapMutations([SET_FILTER_TYPE]);
 
   return {
-    filterType: computed(() => store.state.step1.filterType),
+    filterType,
     changeFilterType
   };
 }

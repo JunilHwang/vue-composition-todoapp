@@ -22,20 +22,19 @@
 </template>
 
 <script>
-import { computed } from "@vue/reactivity";
 import TodoAppender from "@/views/step1/TodoAppender";
 import TodoFooter from "@/views/step1/TodoFooter";
 import TodoItems from "@/views/step1/TodoItems";
 import useTodo from "@/composition/step1/useTodo";
 import useFilter from "@/composition/step1/useFilter";
-import { useStore } from "vuex";
+import useStoreModuleMapper from "@/composition/store/useStoreModuleMapper";
 
 export default {
   name: "Step1",
   components: { TodoItems, TodoFooter, TodoAppender },
   setup() {
-    const store = useStore();
-
+    const { mapGetters } = useStoreModuleMapper("step1");
+    const [items] = mapGetters(["filteredTodoItems"]);
     const {
       addItem,
       updateItem,
@@ -47,14 +46,14 @@ export default {
     const { filterType, changeFilterType } = useFilter();
 
     return {
-      items: computed(() => store.getters.filteredTodoItems),
+      items,
+      filterType,
       addItem,
       updateItem,
       editingItem,
       deleteItem,
       toggleItem,
-      changeFilterType,
-      filterType
+      changeFilterType
     };
   }
 };

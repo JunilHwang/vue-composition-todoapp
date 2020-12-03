@@ -61,33 +61,73 @@ const step2 = {
       const users = await todoServiceOfStep2.fetchUsers();
       commit(SET_USERS, users);
     },
-    [ADD_USER]({  }, payload) {
 
+    async [ADD_USER]({ dispatch }, name) {
+      await todoServiceOfStep2.addUser(name);
+      return dispatch(FETCH_USERS);
     },
-    [REMOVE_USER]({  }, payload) {
 
+    async [REMOVE_USER]({ dispatch, state }) {
+      if (state.selectedUserId === -1) return;
+      await todoServiceOfStep2.removeUser(state.selectedUserId);
+      return dispatch(FETCH_USERS);
     },
-    [FETCH_ITEMS]({  }, payload) {
 
+    async [FETCH_ITEMS]({ commit, state }, userId = state.selectedUserId) {
+      if (userId === -1) return;
+      if (userId !== state.selectedUserId) {
+        commit(SET_LIST_LOADING, true);
+      }
+      const items = await todoServiceOfStep2.fetchItemsByUser(
+        state.selectedUserId
+      );
+      commit(SET_TODO_ITEMS, items);
+      commit(SET_USER, userId);
+      commit(SET_LIST_LOADING, false);
     },
-    [ADD_ITEM]({  }, payload) {
 
+    async [ADD_ITEM]({ dispatch, state, commit }, contents) {
+      commit(SET_APPEND_LOADING, true);
+      await todoServiceOfStep2.addItemByUser(state.selectedUserId, contents);
+      await dispatch(FETCH_ITEMS);
+      commit(SET_APPEND_LOADING, false);
     },
-    [UPDATE_ITEM]({  }, payload) {
 
+    async [UPDATE_ITEM]({ dispatch, state }, { itemId, contents }) {
+      await todoServiceOfStep2.updateItemByUserIdAndItemId(
+        state.selectedUserId,
+        itemId,
+        contents
+      );
+      return dispatch(FETCH_ITEMS);
     },
-    [REMOVE_ITEM]({  }, payload) {
 
+    async [REMOVE_ITEM]({ dispatch, state }, itemId) {
+      await todoServiceOfStep2.removeUserItemById(state.selectedUserId, itemId);
+      return dispatch(FETCH_ITEMS);
     },
-    [REMOVE_ALL_ITEM]({  }, payload) {
 
+    async [REMOVE_ALL_ITEM]({ dispatch, state }) {
+      await todoServiceOfStep2.removeUserItems(state.selectedUserId);
+      return dispatch(FETCH_ITEMS);
     },
-    [TOGGLE_ITEM]({  }, payload) {
 
+    async [TOGGLE_ITEM]({ dispatch, state }, itemId) {
+      await todoServiceOfStep2.toggleItemByUserIdAndItemId(
+        state.selectedUserId,
+        itemId
+      );
+      return dispatch(FETCH_ITEMS);
     },
-    [UPDATE_PRIORITY]({  }, payload) {
 
-    },
+    async [UPDATE_PRIORITY]({ dispatch, state }, { itemId, priority }) {
+      await todoServiceOfStep2.updateItemPriorityByUserIdAndItemId(
+        state.selectedUserId,
+        itemId,
+        priority
+      );
+      return dispatch(FETCH_ITEMS);
+    }
   }
 };
 

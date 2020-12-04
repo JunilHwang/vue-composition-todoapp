@@ -70,43 +70,50 @@ export default {
       return dispatch(FETCH_TEAMS);
     },
 
-    async [FETCH_TEAM]({ commit }, teamId) {
+    async [FETCH_TEAM]({ commit, state: { selectedTeamId } }, teamId = selectedTeamId) {
       const { members } = await todoServiceOfStep3.fetchTeam(teamId);
-      commit(SET_TEAM, teamId);
+      if (teamId !== selectedTeamId) commit(SET_TEAM, teamId);
       commit(SET_MEMBERS, members);
     },
 
-    async [ADD_MEMBER]({ dispatch }, { teamId, name }) {
+    async [ADD_MEMBER]({ dispatch, state: { selectedTeamId: teamId } }, { name }) {
       await todoServiceOfStep3.addMember(teamId, name);
-      return dispatch(FETCH_TEAM, teamId);
+      return dispatch(FETCH_TEAM);
     },
 
-    async [FETCH_ITEMS]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.fetchItems();
+    async [FETCH_ITEMS]({ commit, state: { selectedTeamId: teamId } }, memberId) {
+      const items = await todoServiceOfStep3.fetchItems(teamId, memberId);
+      commit(SET_TODO_ITEMS, items);
     },
 
-    async [ADD_ITEM]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.addItem();
+    async [ADD_ITEM]({ dispatch, state: { selectedTeamId: teamId } }, { memberId, contents }) {
+      await todoServiceOfStep3.addItem(teamId, memberId, contents);
+      return dispatch(FETCH_ITEMS, memberId);
     },
 
-    async [UPDATE_ITEM]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.updateItem();
+    async [UPDATE_ITEM]({ dispatch, state: { selectedTeamId: teamId } }, { memberId, itemId, contents }) {
+      await todoServiceOfStep3.updateItem(teamId, memberId, itemId, contents);
+      return dispatch(FETCH_ITEMS, memberId);
     },
 
-    async [TOGGLE_ITEM]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.toggleItem();
+    async [TOGGLE_ITEM]({ dispatch, state: { selectedTeamId: teamId } }, { memberId, itemId }) {
+      await todoServiceOfStep3.toggleItem(teamId, memberId, itemId);
+      return dispatch(FETCH_ITEMS, memberId);
     },
 
-    async [UPDATE_PRIORITY]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.updatePriority();
+    async [UPDATE_PRIORITY]({ dispatch, state: { selectedTeamId: teamId } }, { memberId, itemId, priority }) {
+      await todoServiceOfStep3.updatePriority(teamId, memberId, itemId, priority);
+      return dispatch(FETCH_ITEMS, memberId);
     },
 
-    async [REMOVE_ITEM]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.removeItem();
+    async [REMOVE_ITEM]({ dispatch, state: { selectedTeamId: teamId } }, { memberId, itemId }) {
+      await todoServiceOfStep3.removeItem(teamId, memberId, itemId);
+      return dispatch(FETCH_ITEMS, memberId);
     },
 
-    async [REMOVE_ALL_ITEM]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.removeAllItem();
+    async [REMOVE_ALL_ITEM]({ dispatch, state: { selectedTeamId: teamId } }, { memberId }) {
+      await todoServiceOfStep3.removeAllItem(teamId, memberId);
+      return dispatch(FETCH_ITEMS, memberId);
     }
   }
 };

@@ -15,6 +15,7 @@ export const REMOVE_ALL_ITEM = "REMOVE_ALL_ITEM";
 
 export const SET_TEAMS = "SET_TEAMS";
 export const SET_TEAM = "SET_TEAM";
+export const SET_MEMBERS = "SET_MEMBERS";
 export const SET_TODO_ITEMS = "SET_TODO_ITEMS";
 export const SET_FILTER_TYPE = "SET_FILTER_TYPE";
 
@@ -24,6 +25,7 @@ export default {
   state: {
     teams: [],
     selectedTeamId: null,
+    members: [],
     todoItems: [],
     filerType: null
   },
@@ -39,6 +41,10 @@ export default {
       state.selectedTeamId = selectedTeamId;
     },
 
+    [SET_MEMBERS](state, members) {
+      state.members = members;
+    },
+
     [SET_TODO_ITEMS](state, todoItems) {
       state.todoItems = todoItems;
     },
@@ -49,39 +55,56 @@ export default {
   },
 
   actions: {
-    async [FETCH_TEAMS]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.fetchTeams();
+    async [FETCH_TEAMS]({ commit }) {
+      const teams = await todoServiceOfStep3.fetchTeams();
+      commit(SET_TEAMS, teams.map(({ _id, name }) => ({ id: _id, name }));
     },
-    async [FETCH_TEAM]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.fetchTeam();
+
+    async [ADD_TEAM]({ dispatch }, name) {
+      await todoServiceOfStep3.addTeam(name);
+      return dispatch(FETCH_TEAMS);
     },
-    async [ADD_TEAM]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.addTeam();
+
+    async [REMOVE_TEAM]({ dispatch, state: { selectedTeamId: id } }) {
+      await todoServiceOfStep3.removeTeam(id);
+      return dispatch(FETCH_TEAMS);
     },
-    async [REMOVE_TEAM]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.removeTeam();
+
+    async [FETCH_TEAM]({ commit }, teamId) {
+      const { members } = await todoServiceOfStep3.fetchTeam(teamId);
+      commit(SET_TEAM, teamId);
+      commit(SET_MEMBERS, members);
     },
-    async [ADD_MEMBER]({ commit, dispatch, state }, {}) {
-      await todoServiceOfStep3.addMember();
+
+    async [ADD_MEMBER]({ dispatch }, { teamId, name }) {
+      await todoServiceOfStep3.addMember(teamId, name);
+      return dispatch(FETCH_TEAM, teamId);
     },
+
     async [FETCH_ITEMS]({ commit, dispatch, state }, {}) {
       await todoServiceOfStep3.fetchItems();
     },
+
     async [ADD_ITEM]({ commit, dispatch, state }, {}) {
       await todoServiceOfStep3.addItem();
     },
+
     async [UPDATE_ITEM]({ commit, dispatch, state }, {}) {
       await todoServiceOfStep3.updateItem();
     },
+
     async [TOGGLE_ITEM]({ commit, dispatch, state }, {}) {
       await todoServiceOfStep3.toggleItem();
     },
+
     async [UPDATE_PRIORITY]({ commit, dispatch, state }, {}) {
       await todoServiceOfStep3.updatePriority();
     },
+
     async [REMOVE_ITEM]({ commit, dispatch, state }, {}) {
       await todoServiceOfStep3.removeItem();
     },
+
     async [REMOVE_ALL_ITEM]({ commit, dispatch, state }, {}) {
       await todoServiceOfStep3.removeAllItem();
     }

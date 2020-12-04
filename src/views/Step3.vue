@@ -1,5 +1,7 @@
 <template>
-  <div class="step3">step3</div>
+  <div class="step3">
+    <router-view />
+  </div>
 </template>
 
 <script>
@@ -345,7 +347,7 @@ export default {
   }
 
   .clear-completed,
-  html .clear-completed:active {
+  .clear-completed:active {
     float: right;
     position: relative;
     line-height: 20px;

@@ -5,8 +5,14 @@
 </template>
 
 <script>
+import todoServiceOfStep3 from "@/services/todoServiceOfStep3";
+
 export default {
-  name: "Step3"
+  name: "Step3",
+
+  setup() {
+    todoServiceOfStep3.fetchTeams().then(console.log);
+  }
 };
 </script>
 

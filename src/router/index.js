@@ -27,7 +27,7 @@ const routes = [
         name: "TeamList"
       },
       {
-        path: "kanban",
+        path: "@:teamId",
         component: Kanban,
         name: "Kanban"
       }

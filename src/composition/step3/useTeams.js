@@ -1,5 +1,5 @@
 import useStoreModuleMapper from "@/composition/store/useStoreModuleMapper";
-import {ADD_TEAM, FETCH_TEAMS} from "@/store/step3";
+import { ADD_TEAM, FETCH_TEAMS } from "@/store/step3";
 
 export default function useTeams() {
   const { mapActions, mapState } = useStoreModuleMapper("step3");
@@ -9,6 +9,10 @@ export default function useTeams() {
   return {
     teams,
     fetchTeams,
-    addTeam
+    addTeam: () => {
+      const name = prompt("팀 이름을 입력해주세요");
+      if (name.trim().length === 0) return;
+      addTeam(name);
+    }
   };
 }

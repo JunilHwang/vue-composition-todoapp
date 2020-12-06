@@ -11,7 +11,7 @@ import {
 
 export default function useTodo() {
   const { mapGetters, mapActions } = useStoreModuleMapper("step3");
-  const [filterTodoItems] = mapGetters(["filterTodoItems"]);
+  const [filteredTodoItems] = mapGetters(["filteredTodoItems"]);
   const [
     fetchItems,
     addItem,
@@ -31,7 +31,7 @@ export default function useTodo() {
   ]);
 
   return {
-    filterTodoItems,
+    filteredTodoItems,
     fetchItems,
     addItem,
     updateItem,

@@ -40,14 +40,14 @@ export default {
     contents: { type: String, required: true }
   },
 
-  setup({ isCompleted }) {
+  setup(props) {
     const state = reactive({
       editing: false
     });
 
     const className = computed(() => {
-      if (state.editing) return "completed";
-      if (isCompleted) return "completed";
+      if (state.editing) return "edit";
+      if (props.isCompleted) return "completed";
       return null;
     });
 

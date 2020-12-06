@@ -3,7 +3,7 @@
     <h1 id="user-title" data-username="eastjun" v-if="team !== null">
       <span><strong v-html="team.name" />'s Todo List</span>
     </h1>
-    <todo-list-by-members :todo-items="filterTodoItems" :members="members" />
+    <todo-list-by-members :todo-items="filteredTodoItems" :members="members" />
   </div>
 </template>
 
@@ -19,15 +19,14 @@ export default {
   setup() {
     const route = useRoute();
     const { team, members, fetchTeam } = useTeams();
-    const { filterTodoItems, fetchItems } = useTodo();
+    const { filteredTodoItems, fetchItems } = useTodo();
     fetchTeam(route.params.teamId)
       .then(() => Promise.all(members.value.map(({ id }) => fetchItems(id))))
-      .then(() => console.log(filterTodoItems.value));
 
     return {
       team,
       members,
-      filterTodoItems
+      filteredTodoItems
     };
   }
 };

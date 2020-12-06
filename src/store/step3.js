@@ -28,7 +28,7 @@ export default {
     team: null,
     members: [],
     todoItems: {},
-    filerType: {}
+    filterType: {}
   },
 
   getters: {
@@ -63,8 +63,8 @@ export default {
       state.todoItems = todoItems;
     },
 
-    [SET_FILTER_TYPE](state, filerType) {
-      state.filerType = filerType;
+    [SET_FILTER_TYPE](state, filterType) {
+      state.filterType = filterType;
     }
   },
 
@@ -109,19 +109,27 @@ export default {
       {
         commit,
         state: {
+          todoItems,
+          filterType,
           team: { id: teamId }
         }
       },
       memberId
     ) {
-      const { todoList = [] } = await todoServiceOfStep3.fetchItems(
-        teamId,
-        memberId
-      );
-      commit(
-        SET_TODO_ITEMS,
-        todoList.map(({ _id, ...item }) => ({ ...item, id: _id }))
-      );
+      const {
+        todoList: todoItemsOfMember = []
+      } = await todoServiceOfStep3.fetchItems(teamId, memberId);
+      commit(SET_TODO_ITEMS, {
+        ...todoItems,
+        [memberId]: todoItemsOfMember.map(({ _id, ...item }) => ({
+          ...item,
+          id: _id
+        }))
+      });
+      commit(SET_FILTER_TYPE, {
+        ...filterType,
+        [memberId]: FilterTypes.ALL
+      });
     },
 
     async [ADD_ITEM](

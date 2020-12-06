@@ -4,9 +4,9 @@
       <span><strong v-html="team.name" />'s Todo List</span>
     </h1>
     <ul class="todoapp-list-container flex-column-container">
-      <li class="todoapp-container" v-for="{ id, name } in members" :key="id">
+      <li class="todoapp-container" v-for="member in members" :key="member.id">
         <h2>
-          <span><strong v-html="name" />'s Todo List</span>
+          <span><strong v-html="member.name" />'s Todo List</span>
         </h2>
         <div class="todoapp">
           <section class="input-container">
@@ -18,111 +18,42 @@
           </section>
           <section class="main">
             <ul class="todo-list">
-              <li class="todo-list-item">
+              <li
+                class="todo-list-item"
+                :class="{
+                  completed: isCompleted
+                }"
+                v-for="{
+                  id,
+                  contents,
+                  isCompleted,
+                  priority
+                } in filterTodoItems[member.id]"
+                :key="id"
+              >
                 <div class="view">
                   <input class="toggle" type="checkbox" />
                   <label class="label">
-                    <div class="chip-container">
+                    <div class="chip-container" v-if="false">
                       <select class="chip select">
                         <option value="0" selected>순위</option>
                         <option value="1">1순위</option>
                         <option value="2">2순위</option>
                       </select>
                     </div>
-                    해야할 아이템
+                    <span
+                      class="chip"
+                      :class="{
+                        secondary: priority === 'SECOND',
+                        primary: priority === 'FIRST'
+                      }"
+                      v-html="`1순위`"
+                    />
+                    {{ contents }}
                   </label>
                   <button class="destroy"></button>
                 </div>
-                <input class="edit" value="완료된 타이틀" />
-              </li>
-              <li class="todo-list-item">
-                <div class="view">
-                  <input class="toggle" type="checkbox" />
-                  <label class="label">
-                    <div class="chip-container">
-                      <select class="chip select">
-                        <option value="0" selected>순위</option>
-                        <option value="1">1순위</option>
-                        <option value="2">2순위</option>
-                      </select>
-                    </div>
-                    해야할 아이템
-                  </label>
-                  <button class="destroy"></button>
-                </div>
-                <input class="edit" value="완료된 타이틀" />
-              </li>
-              <li class="todo-list-item">
-                <div class="view">
-                  <input class="toggle" type="checkbox" />
-                  <label class="label">
-                    <div class="chip-container">
-                      <span class="chip primary">1순위</span>
-                      <select class="chip select hidden">
-                        <option value="0" selected>순위</option>
-                        <option value="1">1순위</option>
-                        <option value="2">2순위</option>
-                      </select>
-                    </div>
-                    <span class="todo-item-text">해야할 아이템</span>
-                  </label>
-                  <button class="delete"></button>
-                </div>
-                <input class="edit" value="완료된 타이틀" />
-              </li>
-              <li class="todo-list-item">
-                <div class="view">
-                  <input class="toggle" type="checkbox" />
-                  <label class="label">
-                    <div class="chip-container">
-                      <span class="chip secondary">1순위</span>
-                      <select class="chip select hidden">
-                        <option value="0" selected>순위</option>
-                        <option value="1">1순위</option>
-                        <option value="2">2순위</option>
-                      </select>
-                    </div>
-                    해야할 아이템
-                  </label>
-                  <button class="destroy"></button>
-                </div>
-                <input class="edit" value="완료된 타이틀" />
-              </li>
-              <li class="todo-list-item completed">
-                <div class="view">
-                  <input class="toggle" type="checkbox" checked />
-                  <label class="label">
-                    <div class="chip-container">
-                      <span class="chip primary">1순위</span>
-                      <select class="chip select hidden">
-                        <option value="0" selected>순위</option>
-                        <option value="1">1순위</option>
-                        <option value="2">2순위</option>
-                      </select>
-                    </div>
-                    완료된 아이템
-                  </label>
-                  <button class="destroy"></button>
-                </div>
-                <input class="edit" value="완료된 타이틀" />
-              </li>
-              <li class="todo-list-item editing">
-                <div class="view">
-                  <input class="toggle" type="checkbox" checked />
-                  <label class="label">
-                    <div class="chip-container">
-                      <span class="chip primary">1순위</span>
-                      <select class="chip select hidden">
-                        <option value="0" selected>순위</option>
-                        <option value="1">1순위</option>
-                        <option value="2">2순위</option>
-                      </select>
-                    </div>
-                    수정중인 아이템
-                  </label>
-                  <button class="destroy"></button>
-                </div>
-                <input class="edit" value="수정중인 타이틀" />
+                <input class="edit" :value="contents" />
               </li>
             </ul>
           </section>
@@ -166,9 +97,9 @@ export default {
     const route = useRoute();
     const { team, members, fetchTeam } = useTeams();
     const { filterTodoItems, fetchItems } = useTodo();
-    fetchTeam(route.params.teamId).then(() =>
-      Promise.all(members.value.map(({ id }) => fetchItems(id)))
-    );
+    fetchTeam(route.params.teamId)
+      .then(() => Promise.all(members.value.map(({ id }) => fetchItems(id))))
+      .then(() => console.log(filterTodoItems.value));
 
     return {
       team,

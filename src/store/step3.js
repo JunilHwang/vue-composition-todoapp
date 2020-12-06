@@ -119,7 +119,7 @@ export default {
       );
     },
 
-    async [ADD_MEMBER]({ dispatch, getters: { teamId } }, { name }) {
+    async [ADD_MEMBER]({ dispatch, getters: { teamId } }, name) {
       await todoServiceOfStep3.addMember(teamId, name);
       return dispatch(FETCH_TEAM, teamId);
     },

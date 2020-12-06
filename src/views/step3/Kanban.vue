@@ -1,9 +1,12 @@
 <template>
   <div>
-    <h1 id="user-title" data-username="eastjun">
-      <span><strong>Team</strong>'s Todo List</span>
+    <h1 id="user-title" data-username="eastjun" v-if="team !== null">
+      <span><strong v-html="team.name" />'s Todo List</span>
     </h1>
-    <ul class="todoapp-list-container flex-column-container">
+    <ul
+      class="todoapp-list-container flex-column-container"
+      v-if="members.length"
+    >
       <li class="todoapp-container">
         <h2>
           <span><strong>eastjun</strong>'s Todo List</span>
@@ -305,8 +308,13 @@ export default {
   name: "Kanban",
   setup() {
     const route = useRoute();
-    const { fetchTeam } = useTeams();
+    const { team, members, fetchTeam } = useTeams();
     fetchTeam(route.params.teamId);
+
+    return {
+      team,
+      members
+    };
   }
 };
 </script>

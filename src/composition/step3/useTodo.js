@@ -1,7 +1,6 @@
 import useStoreModuleMapper from "@/composition/store/useStoreModuleMapper";
 import {
   ADD_ITEM,
-  ADD_MEMBER,
   FETCH_ITEMS,
   REMOVE_ALL_ITEM,
   REMOVE_ITEM,
@@ -12,9 +11,8 @@ import {
 
 export default function useTodo() {
   const { mapState, mapActions } = useStoreModuleMapper("step3");
-  const [members, todoItems] = mapState(["members", "todoItems"]);
+  const [todoItems] = mapState(["todoItems"]);
   const [
-    addMember,
     fetchItems,
     addItem,
     updateItem,
@@ -23,7 +21,6 @@ export default function useTodo() {
     removeItem,
     removeAllItem
   ] = mapActions([
-    ADD_MEMBER,
     FETCH_ITEMS,
     ADD_ITEM,
     UPDATE_ITEM,
@@ -34,9 +31,7 @@ export default function useTodo() {
   ]);
 
   return {
-    members,
     todoItems,
-    addMember,
     fetchItems,
     addItem,
     updateItem,

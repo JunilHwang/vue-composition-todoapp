@@ -20,7 +20,11 @@
             />
           </ul>
         </section>
-        <todo-footer />
+        <todo-footer
+          :filter-type="filterType[member.id]"
+          :member-id="member.id"
+          @update-filter="changeFilterType"
+        />
       </div>
     </li>
     <todo-member-appender />
@@ -33,6 +37,7 @@ import TodoMemberAppender from "./TodoMemberAppender";
 import TodoItem from "./TodoItem";
 import TodoFooter from "./TodoFooter";
 import useTodo from "@/composition/step3/useTodo";
+import useFilter from "@/composition/step3/useFilter";
 
 export default {
   name: "TodoListByMembers",
@@ -45,7 +50,11 @@ export default {
   setup() {
     const { updateItem, toggleItem, updatePriority, removeItem } = useTodo();
 
+    const { filterType, changeFilterType } = useFilter();
+
     return {
+      filterType,
+      changeFilterType,
       updateItem,
       toggleItem,
       updatePriority,

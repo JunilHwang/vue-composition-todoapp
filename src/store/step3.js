@@ -1,4 +1,5 @@
 import todoServiceOfStep3 from "@/services/todoServiceOfStep3";
+import { FilterTypes } from "@/constants";
 
 export const FETCH_TEAMS = "FETCH_TEAMS";
 export const FETCH_TEAM = "FETCH_TEAM";
@@ -26,12 +27,23 @@ export default {
     teams: [],
     team: null,
     members: [],
-    todoItems: [],
-    filerType: null
+    todoItems: {},
+    filerType: {}
   },
 
   getters: {
-    teamId: ({ team: { id } }) => id
+    teamId: ({ team: { id } }) => id,
+    filteredTodoItems: ({ members, todoItems, filterType }) =>
+      members.reduce((obj, { id }) => {
+        const type = filterType[id];
+        obj[id] = todoItems[id].filter(
+          ({ isCompleted }) =>
+            (type === FilterTypes.COMPLETED && isCompleted) ||
+            (type === FilterTypes.ACTIVE && !isCompleted) ||
+            FilterTypes.ALL
+        );
+        return obj;
+      }, {})
   },
 
   mutations: {

@@ -3,7 +3,10 @@
     <div class="view">
       <input class="toggle" type="checkbox" />
       <label class="label">
-        <div class="chip-container" v-if="false">
+        <div
+          class="chip-container"
+          v-if="priority === PriorityTypes.NONE || editingPriority"
+        >
           <select class="chip select">
             <option value="0" selected>순위</option>
             <option value="1">1순위</option>
@@ -11,6 +14,7 @@
           </select>
         </div>
         <span
+          v-else
           class="chip"
           :class="{
             primary: priority === PriorityTypes.FIRST,
@@ -22,7 +26,7 @@
       </label>
       <button class="destroy"></button>
     </div>
-    <input class="edit" :value="contents" />
+    <input v-if="editingContents" class="edit" :value="contents" />
   </li>
 </template>
 
@@ -34,7 +38,6 @@ export default {
 
   props: {
     id: { type: String, required: true },
-    name: { type: String, required: true },
     isCompleted: { type: Boolean, required: true },
     priority: { type: String, required: true },
     contents: { type: String, required: true }
@@ -42,11 +45,12 @@ export default {
 
   setup(props) {
     const state = reactive({
-      editing: false
+      editingContents: false,
+      editingPriority: false
     });
 
     const className = computed(() => {
-      if (state.editing) return "edit";
+      if (state.editingContents) return "edit";
       if (props.isCompleted) return "completed";
       return null;
     });

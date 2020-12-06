@@ -99,7 +99,9 @@ export default {
       commit(
         SET_TODO_ITEMS,
         members.reduce((obj, member, key) => {
-          obj[member._id] = todoItems[key].todoList || [];
+          obj[member._id] = (
+            todoItems[key].todoList || []
+          ).map(({ _id, ...item }) => ({ ...item, id: _id }));
           return obj;
         }, {})
       );

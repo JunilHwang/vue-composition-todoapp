@@ -298,8 +298,16 @@
 </template>
 
 <script>
+import useTeams from "@/composition/step3/useTeams";
+import { useRoute } from "vue-router";
+
 export default {
   name: "Kanban",
-  setup() {}
+  setup() {
+    const route = useRoute();
+    const { setTeam } = useTeams();
+    console.log(route.params.teamId);
+    setTeam(route.params.teamId);
+  }
 };
 </script>

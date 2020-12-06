@@ -59,7 +59,9 @@ export default {
       const teams = await todoServiceOfStep3.fetchTeams();
       commit(
         SET_TEAMS,
-        teams.map(({ _id, name }) => ({ id: _id, name }))
+        teams
+          .map(({ _id, name }) => ({ id: _id, name }))
+          .sort((a, b) => (a.name > b.name ? 1 : -1))
       );
     },
 

@@ -299,6 +299,7 @@
 
 <script>
 export default {
-  name: "Kanban"
+  name: "Kanban",
+  setup() {}
 };
 </script>

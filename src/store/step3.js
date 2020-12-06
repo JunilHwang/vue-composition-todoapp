@@ -90,8 +90,10 @@ export default {
     },
 
     async [FETCH_TEAM]({ commit }, teamId) {
-      const { members, ...team } = await todoServiceOfStep3.fetchTeam(teamId);
-      commit(SET_TEAM, team);
+      const { members, _id: id, name } = await todoServiceOfStep3.fetchTeam(
+        teamId
+      );
+      commit(SET_TEAM, { id, name });
       commit(
         SET_MEMBERS,
         members.map(({ _id, name }) => ({ id: _id, name }))
@@ -103,11 +105,22 @@ export default {
       return dispatch(FETCH_TEAM, teamId);
     },
 
-    async [FETCH_ITEMS]({ commit, getters: { teamId } }, memberId) {
-      const items = await todoServiceOfStep3.fetchItems(teamId, memberId);
+    async [FETCH_ITEMS](
+      {
+        commit,
+        state: {
+          team: { id: teamId }
+        }
+      },
+      memberId
+    ) {
+      const { todoList = [] } = await todoServiceOfStep3.fetchItems(
+        teamId,
+        memberId
+      );
       commit(
         SET_TODO_ITEMS,
-        items.map(({ _id, ...item }) => ({ ...item, id: _id }))
+        todoList.map(({ _id, ...item }) => ({ ...item, id: _id }))
       );
     },
 

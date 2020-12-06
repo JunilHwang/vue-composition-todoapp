@@ -40,7 +40,7 @@ export default {
           ({ isCompleted }) =>
             (type === FilterTypes.COMPLETED && isCompleted) ||
             (type === FilterTypes.ACTIVE && !isCompleted) ||
-            FilterTypes.ALL
+            type === FilterTypes.ALL
         );
         return obj;
       }, {})
@@ -92,6 +92,23 @@ export default {
     async [FETCH_TEAM]({ commit }, teamId) {
       const { members, _id: id, name } = await todoServiceOfStep3.fetchTeam(
         teamId
+      );
+      const todoItems = await Promise.all(
+        members.map(({ _id }) => todoServiceOfStep3.fetchItems(teamId, _id))
+      );
+      commit(
+        SET_TODO_ITEMS,
+        members.reduce((obj, member, key) => {
+          obj[member._id] = todoItems[key].todoList || [];
+          return obj;
+        }, {})
+      );
+      commit(
+        SET_FILTER_TYPE,
+        members.reduce((obj, member) => {
+          obj[member._id] = FilterTypes.ALL;
+          return obj;
+        }, {})
       );
       commit(SET_TEAM, { id, name });
       commit(

@@ -19,9 +19,8 @@ export default {
   setup() {
     const route = useRoute();
     const { team, members, fetchTeam } = useTeams();
-    const { filteredTodoItems, fetchItems } = useTodo();
-    fetchTeam(route.params.teamId)
-      .then(() => Promise.all(members.value.map(({ id }) => fetchItems(id))))
+    const { filteredTodoItems } = useTodo();
+    fetchTeam(route.params.teamId);
 
     return {
       team,

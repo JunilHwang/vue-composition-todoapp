@@ -43,7 +43,7 @@
         </div>
         {{ contents }}
       </label>
-      <button class="destroy"></button>
+      <button class="destroy" @click="removeItem" />
     </div>
     <input
       class="edit"
@@ -124,6 +124,10 @@ export default {
 
       toggleItem() {
         emit("toggle-item", { memberId: props.memberId, itemId: props.id });
+      },
+
+      removeItem() {
+        emit("remove-item", { memberId: props.memberId, itemId: props.id });
       }
     };
   }

@@ -34,10 +34,10 @@ export const updatePriority = (teamId, memberId, itemId, priority) =>
   );
 
 export const removeItem = (teamId, memberId, itemId) =>
-  todoClient.remove(`/teams/${teamId}/members/${memberId}/items/${itemId}`);
+  todoClient.delete(`/teams/${teamId}/members/${memberId}/items/${itemId}`);
 
 export const removeAllItem = (teamId, memberId) =>
-  todoClient.remove(`/teams/${teamId}/members/${memberId}/items`);
+  todoClient.delete(`/teams/${teamId}/members/${memberId}/items`);
 
 export default {
   fetchTeams,

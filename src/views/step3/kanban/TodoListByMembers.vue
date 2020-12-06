@@ -12,6 +12,11 @@
               v-for="item in todoItems[member.id]"
               :key="item.id"
               v-bind="item"
+              @updateItem="updateItem"
+              @toggleItem="toggleItem"
+              @updatePriority="updatePriority"
+              @removeItem="removeItem"
+              @removeAllItem="removeAllItem"
             />
           </ul>
         </section>
@@ -27,6 +32,7 @@ import TodoItemAppender from "./TodoItemAppender";
 import TodoMemberAppender from "./TodoMemberAppender";
 import TodoItem from "./TodoItem";
 import TodoFooter from "./TodoFooter";
+import useTodo from "@/composition/step3/useTodo";
 
 export default {
   name: "TodoListByMembers",
@@ -34,6 +40,24 @@ export default {
   props: {
     todoItems: { type: Object, default: () => ({}) },
     members: { type: Array, default: () => [] }
+  },
+
+  setup() {
+    const {
+      updateItem,
+      toggleItem,
+      updatePriority,
+      removeItem,
+      removeAllItem
+    } = useTodo();
+
+    return {
+      updateItem,
+      toggleItem,
+      updatePriority,
+      removeItem,
+      removeAllItem
+    };
   }
 };
 </script>

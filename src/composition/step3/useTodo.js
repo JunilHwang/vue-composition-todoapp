@@ -17,7 +17,7 @@ export default function useTodo() {
     addItem,
     updateItem,
     toggleItem,
-    updateRepository,
+    updatePriority,
     removeItem,
     removeAllItem
   ] = mapActions([
@@ -36,7 +36,7 @@ export default function useTodo() {
     addItem,
     updateItem,
     toggleItem,
-    updateRepository,
+    updatePriority,
     removeItem,
     removeAllItem
   };

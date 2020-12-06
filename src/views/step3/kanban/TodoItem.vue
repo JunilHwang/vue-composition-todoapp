@@ -7,10 +7,16 @@
           class="chip-container"
           v-if="priority === PriorityTypes.NONE || editingPriority"
         >
-          <select class="chip select">
-            <option value="0" selected>순위</option>
-            <option value="1">1순위</option>
-            <option value="2">2순위</option>
+          <select class="chip select" @change="updatePriority">
+            <option value="0" :selected="PriorityTypes.NONE === priority"
+              >순위</option
+            >
+            <option value="1" :selected="PriorityTypes.FIRST === priority"
+              >1순위</option
+            >
+            <option value="2" :selected="PriorityTypes.SECOND === priority"
+              >2순위</option
+            >
           </select>
         </div>
         <span
@@ -20,6 +26,7 @@
             primary: priority === PriorityTypes.FIRST,
             secondary: priority === PriorityTypes.SECOND
           }"
+          @dblclick="editContents"
           v-html="`1순위`"
         />
         {{ contents }}
@@ -31,8 +38,9 @@
 </template>
 
 <script>
-import { PriorityTypes } from "@/constants";
 import { computed, reactive, toRefs } from "@vue/reactivity";
+import { PriorityTypes } from "@/constants";
+
 export default {
   name: "TodoItem",
 
@@ -40,10 +48,11 @@ export default {
     id: { type: String, required: true },
     isCompleted: { type: Boolean, required: true },
     priority: { type: String, required: true },
-    contents: { type: String, required: true }
+    contents: { type: String, required: true },
+    memberId: { type: String, required: true }
   },
 
-  setup(props) {
+  setup(props, { emit }) {
     const state = reactive({
       editingContents: false,
       editingPriority: false
@@ -58,7 +67,17 @@ export default {
     return {
       ...toRefs(state),
       className,
-      PriorityTypes
+      PriorityTypes,
+
+      editContents() {
+        state.editingContents = true;
+      },
+
+      updatePriority({ target }) {
+        emit('updatePriority', {
+          memberId:
+        })
+      }
     };
   }
 };

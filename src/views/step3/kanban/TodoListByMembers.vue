@@ -10,13 +10,13 @@
           <ul class="todo-list">
             <todo-item
               v-for="item in todoItems[member.id]"
-              :key="item.id"
               v-bind="item"
-              @updateItem="updateItem"
-              @toggleItem="toggleItem"
-              @updatePriority="updatePriority"
-              @removeItem="removeItem"
-              @removeAllItem="removeAllItem"
+              :key="item.id"
+              :member-id="member.id"
+              @update-item="updateItem"
+              @toggle-item="toggleItem"
+              @update-priority="updatePriority"
+              @remove-item="removeItem"
             />
           </ul>
         </section>
@@ -43,20 +43,13 @@ export default {
   },
 
   setup() {
-    const {
-      updateItem,
-      toggleItem,
-      updatePriority,
-      removeItem,
-      removeAllItem
-    } = useTodo();
+    const { updateItem, toggleItem, updatePriority, removeItem } = useTodo();
 
     return {
       updateItem,
       toggleItem,
       updatePriority,
-      removeItem,
-      removeAllItem
+      removeItem
     };
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="count-container">
-    <span class="todo-count">총 <strong>0</strong> 개</span>
+    <span class="todo-count">총 <strong v-html="count" /> 개</span>
     <ul class="filters">
       <li>
         <a
@@ -39,7 +39,8 @@ export default {
 
   props: {
     memberId: { type: String, required: true },
-    filterType: { type: String, required: true }
+    filterType: { type: String, required: true },
+    count: { type: Number, required: true }
   },
 
   setup(props, { emit }) {

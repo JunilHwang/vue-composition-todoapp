@@ -23,6 +23,7 @@
         <todo-footer
           :filter-type="filterType[member.id]"
           :member-id="member.id"
+          :count="todoItems[member.id].length"
           @update-filter="changeFilterType"
         />
       </div>

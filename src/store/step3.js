@@ -197,7 +197,7 @@ export default {
       return dispatch(FETCH_ITEMS, memberId);
     },
 
-    async [REMOVE_ALL_ITEM]({ dispatch, getters: { teamId } }, { memberId }) {
+    async [REMOVE_ALL_ITEM]({ dispatch, getters: { teamId } }, memberId) {
       await todoServiceOfStep3.removeAllItem(teamId, memberId);
       return dispatch(FETCH_ITEMS, memberId);
     }

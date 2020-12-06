@@ -25,6 +25,7 @@
           :member-id="member.id"
           :count="todoItems[member.id].length"
           @update-filter="changeFilterType"
+          @remove-all="removeAllItem"
         />
       </div>
     </li>
@@ -49,7 +50,13 @@ export default {
   },
 
   setup() {
-    const { updateItem, toggleItem, updatePriority, removeItem } = useTodo();
+    const {
+      updateItem,
+      toggleItem,
+      updatePriority,
+      removeItem,
+      removeAllItem
+    } = useTodo();
 
     const { filterType, changeFilterType } = useFilter();
 
@@ -59,7 +66,8 @@ export default {
       updateItem,
       toggleItem,
       updatePriority,
-      removeItem
+      removeItem,
+      removeAllItem
     };
   }
 };

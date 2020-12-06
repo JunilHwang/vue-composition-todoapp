@@ -27,7 +27,9 @@
         />
       </li>
     </ul>
-    <button class="clear-completed">모두 삭제</button>
+    <button class="clear-completed" @click="$emit('remove-all', memberId)">
+      모두 삭제
+    </button>
   </div>
 </template>
 

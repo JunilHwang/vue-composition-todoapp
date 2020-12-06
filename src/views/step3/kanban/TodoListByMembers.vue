@@ -5,7 +5,7 @@
         <span><strong v-html="member.name" />'s Todo List</span>
       </h2>
       <div class="todoapp">
-        <todo-appender />
+        <todo-item-appender :member-id="member.id" />
         <section class="main">
           <ul class="todo-list">
             <todo-item
@@ -18,22 +18,19 @@
         <todo-footer />
       </div>
     </li>
-    <li class="add-user-button-container">
-      <button id="add-user-button" class="ripple">
-        <span class="material-icons">add</span>
-      </button>
-    </li>
+    <todo-member-appender />
   </ul>
 </template>
 
 <script>
-import TodoAppender from "./TodoAppender";
+import TodoItemAppender from "./TodoItemAppender";
+import TodoMemberAppender from "./TodoMemberAppender";
 import TodoItem from "./TodoItem";
 import TodoFooter from "./TodoFooter";
 
 export default {
   name: "TodoListByMembers",
-  components: { TodoFooter, TodoItem, TodoAppender },
+  components: { TodoFooter, TodoItem, TodoItemAppender, TodoMemberAppender },
   props: {
     todoItems: { type: Object, default: () => ({}) },
     members: { type: Array, default: () => [] }

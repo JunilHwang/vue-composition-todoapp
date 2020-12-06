@@ -135,19 +135,20 @@ export default {
       },
       memberId
     ) {
-      const {
-        todoList: todoItemsOfMember = []
-      } = await todoServiceOfStep3.fetchItems(teamId, memberId);
-      commit(SET_TODO_ITEMS, {
-        ...todoItems,
-        [memberId]: todoItemsOfMember.map(({ _id, ...item }) => ({
-          ...item,
-          id: _id
-        }))
-      });
+      const { todoList = [] } = await todoServiceOfStep3.fetchItems(
+        teamId,
+        memberId
+      );
       commit(SET_FILTER_TYPE, {
         ...filterType,
         [memberId]: FilterTypes.ALL
+      });
+      commit(SET_TODO_ITEMS, {
+        ...todoItems,
+        [memberId]: todoList.map(({ _id, ...item }) => ({
+          ...item,
+          id: _id
+        }))
       });
     },
 

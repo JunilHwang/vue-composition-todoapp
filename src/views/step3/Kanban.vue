@@ -305,9 +305,8 @@ export default {
   name: "Kanban",
   setup() {
     const route = useRoute();
-    const { setTeam } = useTeams();
-    console.log(route.params.teamId);
-    setTeam(route.params.teamId);
+    const { fetchTeam } = useTeams();
+    fetchTeam(route.params.teamId);
   }
 };
 </script>

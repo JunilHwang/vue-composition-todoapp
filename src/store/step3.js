@@ -24,21 +24,23 @@ export default {
 
   state: {
     teams: [],
-    selectedTeamId: null,
+    team: null,
     members: [],
     todoItems: [],
     filerType: null
   },
 
-  getters: {},
+  getters: {
+    teamId: ({ team: { id } }) => id
+  },
 
   mutations: {
     [SET_TEAMS](state, teams) {
       state.teams = teams;
     },
 
-    [SET_TEAM](state, selectedTeamId) {
-      state.selectedTeamId = selectedTeamId;
+    [SET_TEAM](state, team) {
+      state.team = team;
     },
 
     [SET_MEMBERS](state, members) {
@@ -70,35 +72,26 @@ export default {
       return dispatch(FETCH_TEAMS);
     },
 
-    async [REMOVE_TEAM]({ dispatch, state: { selectedTeamId: id } }) {
-      await todoServiceOfStep3.removeTeam(id);
+    async [REMOVE_TEAM]({ dispatch, getters: { teamId } }) {
+      await todoServiceOfStep3.removeTeam(teamId);
       return dispatch(FETCH_TEAMS);
     },
 
-    async [FETCH_TEAM](
-      { commit, state: { selectedTeamId } },
-      teamId = selectedTeamId
-    ) {
-      const { members } = await todoServiceOfStep3.fetchTeam(teamId);
-      if (teamId !== selectedTeamId) commit(SET_TEAM, teamId);
+    async [FETCH_TEAM]({ commit }, teamId) {
+      const { members, ...team } = await todoServiceOfStep3.fetchTeam(teamId);
+      commit(SET_TEAM, team);
       commit(
         SET_MEMBERS,
         members.map(({ _id, name }) => ({ id: _id, name }))
       );
     },
 
-    async [ADD_MEMBER](
-      { dispatch, state: { selectedTeamId: teamId } },
-      { name }
-    ) {
+    async [ADD_MEMBER]({ dispatch, getters: { teamId } }, { name }) {
       await todoServiceOfStep3.addMember(teamId, name);
-      return dispatch(FETCH_TEAM);
+      return dispatch(FETCH_TEAM, teamId);
     },
 
-    async [FETCH_ITEMS](
-      { commit, state: { selectedTeamId: teamId } },
-      memberId
-    ) {
+    async [FETCH_ITEMS]({ commit, getters: { teamId } }, memberId) {
       const items = await todoServiceOfStep3.fetchItems(teamId, memberId);
       commit(
         SET_TODO_ITEMS,
@@ -107,7 +100,7 @@ export default {
     },
 
     async [ADD_ITEM](
-      { dispatch, state: { selectedTeamId: teamId } },
+      { dispatch, getters: { teamId } },
       { memberId, contents }
     ) {
       await todoServiceOfStep3.addItem(teamId, memberId, contents);
@@ -115,7 +108,7 @@ export default {
     },
 
     async [UPDATE_ITEM](
-      { dispatch, state: { selectedTeamId: teamId } },
+      { dispatch, getters: { teamId } },
       { memberId, itemId, contents }
     ) {
       await todoServiceOfStep3.updateItem(teamId, memberId, itemId, contents);
@@ -123,7 +116,7 @@ export default {
     },
 
     async [TOGGLE_ITEM](
-      { dispatch, state: { selectedTeamId: teamId } },
+      { dispatch, getters: { teamId } },
       { memberId, itemId }
     ) {
       await todoServiceOfStep3.toggleItem(teamId, memberId, itemId);
@@ -131,7 +124,7 @@ export default {
     },
 
     async [UPDATE_PRIORITY](
-      { dispatch, state: { selectedTeamId: teamId } },
+      { dispatch, getters: { teamId } },
       { memberId, itemId, priority }
     ) {
       await todoServiceOfStep3.updatePriority(
@@ -144,17 +137,14 @@ export default {
     },
 
     async [REMOVE_ITEM](
-      { dispatch, state: { selectedTeamId: teamId } },
+      { dispatch, getters: { teamId } },
       { memberId, itemId }
     ) {
       await todoServiceOfStep3.removeItem(teamId, memberId, itemId);
       return dispatch(FETCH_ITEMS, memberId);
     },
 
-    async [REMOVE_ALL_ITEM](
-      { dispatch, state: { selectedTeamId: teamId } },
-      { memberId }
-    ) {
+    async [REMOVE_ALL_ITEM]({ dispatch, getters: { teamId } }, { memberId }) {
       await todoServiceOfStep3.removeAllItem(teamId, memberId);
       return dispatch(FETCH_ITEMS, memberId);
     }

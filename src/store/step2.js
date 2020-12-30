@@ -35,7 +35,7 @@ const step2 = {
       [...users].sort((a, b) => (a.name < b.name ? 1 : -1)),
 
     selectedUser: ({ users, selectedUserId }) =>
-      users.find(({ _id }) => _id === selectedUserId),
+      users.find(({ id }) => id === selectedUserId),
 
     filteredTodoItems: ({ filterType, todoItems }) =>
       todoItems.filter(

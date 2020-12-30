@@ -1,34 +1,34 @@
 <template>
   <div class="step2">
     <user-list
-      :users="userHooks.orderedUsers.value"
-      :selected-user="userHooks.selectedUserId.value"
-      @add-user="userHooks.addUser"
-      @select-user="userHooks.selectUser"
-      @remove-user="userHooks.removeUser"
-      @fetch-items="todoHooks.fetchItems"
-      @reset-items="todoHooks.resetItems"
+      :users="user.orderedUsers.value"
+      :selected-user="user.selectedUserId.value"
+      @add-user="user.addUser"
+      @select-user="user.selectUser"
+      @remove-user="user.removeUser"
+      @fetch-items="todo.fetchItems"
+      @reset-items="todo.resetItems"
     />
-    <template v-if="userHooks.selectedUserId.value !== null">
+    <template v-if="user.selectedUserId.value !== null">
       <h1 id="user-title">
-        <span><strong v-html="userHooks.selectedUser.name" />'s Todo List</span>
+        <span><strong v-html="user.selectedUser.value.name" />'s Todo List</span>
       </h1>
       <section class="todoapp">
-        <todo-appender @add-item="todoHooks.addItem" />
+        <todo-appender @add-item="todo.addItem" />
         <todo-items
-          :todo-items="todoHooks.filteredTodoItems.value"
-          :list-loading="todoHooks.listLoading.value"
-          :append-loading="todoHooks.appendLoading.value"
-          @update-item="todoHooks.updateItem"
-          @remove-item="todoHooks.removeItem"
-          @toggle-item="todoHooks.toggleItem"
-          @update-priority="todoHooks.updatePriority"
+          :todo-items="todo.filteredTodoItems.value"
+          :list-loading="todo.listLoading.value"
+          :append-loading="todo.appendLoading.value"
+          @update-item="todo.updateItem"
+          @remove-item="todo.removeItem"
+          @toggle-item="todo.toggleItem"
+          @update-priority="todo.updatePriority"
         />
         <todo-footer
-          :count="todoHooks.filteredTodoItems.value.length"
+          :count="todo.filteredTodoItems.value.length"
           :filter-type="filterType"
           @change-filter="changeFilterType"
-          @remove-all="todoHooks.removeAllItem"
+          @remove-all="todo.removeAllItem"
         />
       </section>
     </template>
@@ -49,15 +49,15 @@ export default {
   components: { TodoItems, TodoAppender, UserList, TodoFooter },
 
   setup() {
-    const userHooks = useUser();
-    const todoHooks = useTodo();
+    const user = useUser();
+    const todo = useTodo();
     const { filterType, changeFilterType } = useFilter();
 
-    userHooks.fetchUsers();
+    user.fetchUsers();
 
     return {
-      userHooks,
-      todoHooks,
+      user,
+      todo,
       filterType,
       changeFilterType
     };
